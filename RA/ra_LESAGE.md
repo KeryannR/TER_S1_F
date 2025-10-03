@@ -9,6 +9,8 @@
 
 #### Remarks:
 Il manque d'espaces innacessible aux joueurs, il faut inspecter le biais vers les bords.
+Voir l'algo tetris:
+https://shaunlebron.github.io/pacman-mazegen/
 #### Implementation:
 - Implementation of the Hunt & Kill algorithm, the choice was motivated by aesthetic criteria
 - Implementation of a braided version of the Hunt & Kill algorithm to make mazes where some isolated blocks may occurs **(check bias)**

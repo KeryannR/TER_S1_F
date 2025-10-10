@@ -9,4 +9,8 @@
 - Documentation of "pygames", a potential library for graphic representation of the maze and handling inputs + test of the library
 
 ### Second session:
+#### Research :
+- Differents way of exporting our maze in json (cf. documents/json_output.md)
+
 #### Implementations:
+- Python code that display a JSON fromatted maze with pygame

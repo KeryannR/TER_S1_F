@@ -1,8 +1,10 @@
-# JSON OUTPUT — Comparatif des formats possibles
+# JSON OUTPUT - Comparatif des formats possibles
 
 ## 1. Format Matrice / Grille (Liste de listes)
 Representing Matrices as JSON Objects - https://www.openriskmanagement.com/representing-matrices-as-json-objects-part-1/
+
 Data Structure to Represent a Maze - https://stackoverflow.com/questions/4551575/data-structure-to-represent-a-maze
+
 
 ### Description
 Un tableau 2D où chaque case correspond à un élément (mur, vide, bonus, etc.).
@@ -36,7 +38,9 @@ C’est le format le plus direct à générer en Python.
 
 ## 2. Format Liste d’objets (tuiles individuelles)
 Real Python - Working with JSON Data in Python - https://realpython.com/python-json/
+
 Stack Overflow - Practical way to create game levels/maps - https://stackoverflow.com/questions/19122730/most-practical-way-to-create-game-levelsmap
+
 
 ### Description
 
@@ -65,7 +69,7 @@ Chaque tuile est représentée par un objet JSON contenant ses coordonnées et s
 
 
 ## 3. Format Tiled (éditeur de cartes 2D)
-Tiled — JSON Map Format Documentation - https://doc.mapeditor.org/en/stable/reference/json-map-format/
+Tiled - JSON Map Format Documentation - https://doc.mapeditor.org/en/stable/reference/json-map-format/
 
 ### Description
 C’est le format JSON utilisé par l’éditeur Tiled, un standard pour les jeux 2D basés sur des tuiles.

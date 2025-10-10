@@ -79,6 +79,23 @@ def extendGrid(grid:np.ndarray) -> np.ndarray[int]:
     # Return double symmetry of the grid
     return symmetric(symmetric(grid), axis=1)
 
+def removeBorderSpike(grid:np.ndarray, maxLength:int=2) -> np.ndarray[int]:
+    grid = grid.copy()
+    spikeMask = np.ones(maxLength+1)
+    for row in range(grid.shape[0]-1):
+        if np.sum(grid[row, :maxLength+1] * spikeMask) == maxLength + 1:
+            grid[row, 0] = 0
+        if np.sum(grid[row, -maxLength-1:] * spikeMask) == maxLength + 1:
+            grid[row, -1] = 0
+    
+    for col in range(grid.shape[1]-1):
+        if np.sum(grid[:maxLength+1, col] * spikeMask) == maxLength + 1:
+            grid[0, col] = 0
+        if np.sum(grid[-maxLength-1:, col] * spikeMask) == maxLength + 1:
+            grid[-1, col] = 0
+    
+    return grid
+
 def showGrid(grid:np.ndarray) -> None:
     plt.matshow(grid, cmap="grey")
     plt.show()
@@ -88,4 +105,5 @@ if __name__ == "__main__":
     tileList = importTiles("inCell\\")
     grid = placeInGrid(tileList, X_MAX, Y_MAX, seed=0, nStep=20000)
     grid = extendGrid(grid)
+    grid = removeBorderSpike(grid, maxLength=2)
     showGrid(grid)

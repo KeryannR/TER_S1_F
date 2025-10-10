@@ -1,11 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
-<<<<<<< HEAD
+
 from MazeGeneration.metrics.MazeMetrics_Tetris import print_maze_structure_metrics
-=======
+
 import json
->>>>>>> 46b89371d0a01a4044a8882a5f42ac8dd8afc50b
+
 
 def readTiles(path:str) -> np.ndarray[int]:
     # Open and parse the tile format
@@ -125,12 +125,12 @@ if __name__ == "__main__":
     tileList = importTiles("inCell\\")
     grid = placeInGrid(tileList, X_MAX, Y_MAX, seed=100, nStep=20000)
     grid = extendGrid(grid)
-<<<<<<< HEAD
+
     showGrid(grid)
 
     print_maze_structure_metrics(grid)
-=======
+
     grid = removeBorderSpike(grid, maxLength=2)
     showGrid(grid)
     exportToJSON(grid, "test.json")
->>>>>>> 46b89371d0a01a4044a8882a5f42ac8dd8afc50b
+

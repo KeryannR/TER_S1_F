@@ -1,5 +1,5 @@
-from Grid import Grid
-from HuntAndKill import HuntAndKill
+from MazeGeneration.HuntAndKill import HuntAndKill
+from MazeGeneration.Grid import Grid
 from collections import deque
 import numpy as np
 

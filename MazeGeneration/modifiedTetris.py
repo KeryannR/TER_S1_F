@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from MazeGeneration.metrics.MazeMetrics_Tetris import print_maze_structure_metrics
 
 def readTiles(path:str) -> np.ndarray[int]:
     # Open and parse the tile format
@@ -89,3 +90,5 @@ if __name__ == "__main__":
     grid = placeInGrid(tileList, X_MAX, Y_MAX, seed=0, nStep=20000)
     grid = extendGrid(grid)
     showGrid(grid)
+
+    print_maze_structure_metrics(grid)

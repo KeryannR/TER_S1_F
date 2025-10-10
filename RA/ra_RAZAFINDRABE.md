@@ -14,3 +14,15 @@
 - Set up the initial project structure
 
 ### Second session: 
+#### Papers read:
+- "An extensive comparative analysis on different maze generation algorithms" by D. Mane : https://ijisae.org/index.php/IJISAE/article/view/3557/2162
+
+#### Research:
+- Studied metrics to describe maze structures, focusing on local connectivity (Dead-Ends, Straights, Turns, Junctions, Crossroads).
+- Analyzed how Tetris-based maze generation differs structurally from Hunt-and-Kill.
+
+### Implementations:
+- Moved metrics computation into a separate metrics package.
+- Tested metrics on sample mazes generated with Hunt-and-Kill and Tetris-based approaches.
+- Firt implementation of metrics on Hunt-and-Kill mazes.
+- Implemented functions to calculate Dead-Ends%, Straights%, Turns%, Junctions%, Crossroads% for any maze represented as a 2D NumPy array.

@@ -24,7 +24,7 @@ https://shaunlebron.github.io/pacman-mazegen/
 - La version Tetris de la génération de labyrinthe pacman par Shaun Le Bron se révèle beaucoup trop complexe, l'algorithme n'est pas donné, la documentation ne dit pas grand chose et le code (~2000 lignes) est beacuoup trop long pour être compris de manière simple. Il a donc été décidé d'implémenter une version modifié afin de gagner du temps. 
 - Il manque toujours d'espaces inaccessibles aux joueurs,
 - Le nouvel algorithme n'a plus de biais visible
-- Il faut implémenter un moyen de réduire les "spikes" sur les bords de la grille qui engendrent des culs de sacs
+- Il faut implémenter un moyen de réduire les "spikes" sur les bords de la grille qui engendrent des culs de sacs [done]
 - Il faut implémenter un moyen de retirer les chemein de 2 de large 
 
 #### Implementation:

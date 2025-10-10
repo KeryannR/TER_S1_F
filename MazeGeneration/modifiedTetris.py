@@ -1,7 +1,7 @@
-
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+import json
 
 def readTiles(path:str) -> np.ndarray[int]:
     # Open and parse the tile format
@@ -101,10 +101,26 @@ def showGrid(grid:np.ndarray) -> None:
     plt.matshow(grid, cmap="grey")
     plt.show()
 
+def exportToJSON(grid:np.ndarray[int], outPath:str) -> None:
+    with open(outPath, "w") as file:
+        json.dump(
+            {
+                "width": grid.shape[1],
+                "height": grid.shape[0],
+                "grid": grid.tolist(),
+                "legend": {
+                    "0": "path",
+                    "1": "wall"
+                }
+            },      
+            file,
+        )
+
 if __name__ == "__main__":
     X_MAX = Y_MAX = 15
     tileList = importTiles("inCell\\")
-    grid = placeInGrid(tileList, X_MAX, Y_MAX, seed=0, nStep=20000)
+    grid = placeInGrid(tileList, X_MAX, Y_MAX, seed=100, nStep=20000)
     grid = extendGrid(grid)
     grid = removeBorderSpike(grid, maxLength=2)
     showGrid(grid)
+    exportToJSON(grid, "test.json")

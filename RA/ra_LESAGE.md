@@ -34,3 +34,5 @@ https://shaunlebron.github.io/pacman-mazegen/
 ### Third session:
 #### Implementation:
 - Implémentation d'un wrapper pour l'appel du fichier de génration de Maze à partir du terminal avec des paramètres (permettra de simplifier l'implémentation finale de l'API).
+- Retrait d'un bug engendrant de la 8-connexité lorsqu'une symétrie était impliquée ou que l'on retirait les border spikes (voir séance 2).
+- Début de l'implémentation de pièces large pour plus ressembler à PACMAN...  

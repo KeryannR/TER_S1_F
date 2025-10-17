@@ -101,10 +101,9 @@ def showGrid(grid:np.ndarray) -> None:
     plt.matshow(grid, cmap="grey")
     plt.show()
 
-def exportToJSON(grid:np.ndarray[int], outPath:str) -> None:
-    with open(outPath, "w") as file:
-        json.dump(
-            {
+def exportToJSON(grid:np.ndarray[int], outPath:str = None) -> str|None:
+    
+    jsonVal = {
                 "width": grid.shape[1],
                 "height": grid.shape[0],
                 "grid": grid.tolist(),
@@ -112,8 +111,16 @@ def exportToJSON(grid:np.ndarray[int], outPath:str) -> None:
                     "0": "path",
                     "1": "wall"
                 }
-            },      
-            file,
+    }
+    
+    if outPath is None:
+        return json.dumps(jsonVal)
+    
+    
+    with open(outPath, "w") as file:
+        json.dump(
+            jsonVal,      
+            file
         )
 
 if __name__ == "__main__":

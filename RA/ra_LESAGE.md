@@ -30,3 +30,7 @@ https://shaunlebron.github.io/pacman-mazegen/
 
 #### Implementation:
 - Implémentation d'une version modifié de l'algorithme basé sur Tetris. Dans le nouvel algorithme, des cellules sont créés et placés aléatoirement sur la grille. Le résultat est sensuite mis en mirroir et concaténé en symmetrie par les deux axes.
+
+### Third session:
+#### Implementation:
+- Implémentation d'un wrapper pour l'appel du fichier de génration de Maze à partir du terminal avec des paramètres (permettra de simplifier l'implémentation finale de l'API).

@@ -26,3 +26,22 @@
 - Tested metrics on sample mazes generated with Hunt-and-Kill and Tetris-based approaches.
 - Firt implementation of metrics on Hunt-and-Kill mazes.
 - Implemented functions to calculate Dead-Ends%, Straights%, Turns%, Junctions%, Crossroads% for any maze represented as a 2D NumPy array.
+
+### Third session
+#### Papers read:
+None this session — the focus was on testing and validation of the existing codebase.
+
+#### Research:
+- Studied unit testing strategies for procedural content generation systems (maze generators).
+- Investigated how to validate maze structures through topological properties (connectivity, symmetry, wall density).
+
+#### Implementations:
+- This testing phase serves as the foundation for upcoming API development.
+- Designed and implemented a complete unit testing suite using Python’s unittest framework.
+- Structured the test suite into two main sections:
+  - Basic functionality tests: verifying maze size, JSON output structure, fixed seeds, and grid validity.
+  - Advanced robustness tests: checking symmetry, maze connectivity (flood-fill), wall density, invalid parameter handling, and performance.
+- Added skip conditions for optional features (e.g., missing tile files) to ensure smooth CI/CD integration.
+- Improved test readability with descriptive comments.
+- Verified maze generation consistency across multiple seeds and configuration parameters.
+- Confirmed full JSON compatibility for API deployment.

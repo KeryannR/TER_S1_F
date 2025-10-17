@@ -2,8 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-from MazeGeneration.metrics.MazeMetrics_Tetris import print_maze_structure_metrics
-
 import json
 
 
@@ -134,8 +132,6 @@ if __name__ == "__main__":
     grid = extendGrid(grid)
 
     showGrid(grid)
-
-    print_maze_structure_metrics(grid)
 
     grid = removeBorderSpike(grid, maxLength=2)
     showGrid(grid)

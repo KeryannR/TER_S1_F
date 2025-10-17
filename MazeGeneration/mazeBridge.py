@@ -22,7 +22,7 @@ paramList = [
     "--nstep",
     "--maxborderspkikesize",
     "--includetile",
-    "--excludetile",
+    #"--excludetile",
     "--help",
     "--show"
 ]
@@ -50,8 +50,8 @@ for i in range(0, len(param), 2):
             maxBorderSpikeSize = int(val)
         case "--includetile":
             includeTile = val.split()
-        case "--excludetile":
-            excludeTile = val.split() if val.lower() != "none" else None
+        #case "--excludetile":
+        #    excludeTile = val.split() if val.lower() != "none" else None
         case "--help":
             help = True if val.lower() == "true" else False
             break
@@ -71,14 +71,14 @@ else:
     for tile in includeTile:
         tileList.append(mazeGen.readTiles(f"inCell\\{tile}.tile"))
 
-if excludeTile is not None:
-    tileList = set([tuple(map(tuple, arr)) for arr in tileList])
-    
-    for tile in excludeTile:
-        tileArr:np.ndarray = tuple(mazeGen.readTiles(f"inCell\\{tile}.tile"))
-        tileList.remove(tuple(map(tuple, tileArr)))
-        
-    tileList = [np.array(tup) for tup in tileList]
+#if excludeTile is not None:
+#    tileList = set([tuple(map(tuple, arr)) for arr in tileList])
+#    
+#    for tile in excludeTile:
+#        tileArr:np.ndarray = tuple(mazeGen.readTiles(f"inCell\\{tile}.tile"))
+#        tileList.remove(tuple(map(tuple, tileArr)))
+#        
+#    tileList = [np.array(tup) for tup in tileList]
 
 
 grid = mazeGen.placeInGrid(tileList, xSize, ySize, seed=seed, nStep=nStep)

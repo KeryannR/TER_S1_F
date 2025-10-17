@@ -13,12 +13,13 @@ def readTiles(path:str) -> np.ndarray[int]:
             tile.append([int(i) for i in row.strip().split(" ")])
         return np.array(tile)
 
-def importTiles(rootPath:str = "inCell\\") ->list[np.ndarray[int]]:
+def importTiles(rootPath:str = "inCell\\", excludeSpecial:bool = True) ->list[np.ndarray[int]]:
     # Retrieve and parse all the tiles in a folder
     tileList = []
     for inputFile in os.listdir(rootPath):
-        #tileList.append(readTiles(rootPath+inputFile))
-        tileList.append(readTiles(os.path.join(rootPath, inputFile)))
+        if excludeSpecial and inputFile.startswith("special_"):
+            continue
+        tileList.append(readTiles(rootPath+inputFile))
     return tileList
 
 def rotateTile(tile:np.ndarray[int], k:int = 1) -> np.ndarray[int]:
@@ -86,19 +87,40 @@ def extendGrid(grid:np.ndarray) -> np.ndarray[int]:
 def removeBorderSpike(grid:np.ndarray, maxLength:int=2) -> np.ndarray[int]:
     grid = grid.copy()
     spikeMask = np.ones(maxLength+1)
-    for row in range(grid.shape[0]-1):
-        if np.sum(grid[row, :maxLength+1] * spikeMask) == maxLength + 1:
+    for row in range(1, grid.shape[0]-1):
+        if np.sum(grid[row, :maxLength+1] * spikeMask) == maxLength + 1 and grid[row-1, 0] != 1 and grid[row+1, 0] != 1:
             grid[row, 0] = 0
-        if np.sum(grid[row, -maxLength-1:] * spikeMask) == maxLength + 1:
+        if np.sum(grid[row, -maxLength-1:] * spikeMask) == maxLength + 1 and grid[row-1, -1] != 1 and grid[row+1, -1] != 1:
             grid[row, -1] = 0
     
-    for col in range(grid.shape[1]-1):
-        if np.sum(grid[:maxLength+1, col] * spikeMask) == maxLength + 1:
+    for col in range(1, grid.shape[1]-1):
+        if np.sum(grid[:maxLength+1, col] * spikeMask) == maxLength + 1 and grid[0, col-1] != 1 and grid[0, col+1] != 1:
             grid[0, col] = 0
-        if np.sum(grid[-maxLength-1:, col] * spikeMask) == maxLength + 1:
+        if np.sum(grid[-maxLength-1:, col] * spikeMask) == maxLength + 1 and grid[-1, col-1] != 1 and grid[-1, col+1] != 1:
             grid[-1, col] = 0
     
     return grid
+
+def remove8connexity(grid:np.ndarray, seed:int = None) -> np.ndarray[int]:
+    grid = grid.copy()
+    rng = np.random.RandomState(seed)
+    mask = np.array([[0,1], [1,0]])
+    mask90 = np.array([[1,0], [0,1]])
+    for row in range(0, grid.shape[0]-1):
+        for col in range(0, grid.shape[1]-1):
+            if np.array_equal(grid[row:row+2, col:col+2], mask):
+                randomCell = rng.randint(2)
+                if randomCell == 0:
+                    grid[row, col+1] = 0
+                else:
+                    grid[row+1, col] = 0
+            elif np.array_equal(grid[row:row+2, col:col+2], mask90):
+                randomCell = rng.randint(2)
+                if randomCell == 0:
+                    grid[row, col+1] = 0
+                else:
+                    grid[row+1, col] = 0
+    return  grid
 
 def showGrid(grid:np.ndarray) -> None:
     plt.matshow(grid, cmap="grey")

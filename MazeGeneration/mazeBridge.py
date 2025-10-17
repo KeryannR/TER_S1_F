@@ -7,11 +7,10 @@ print(param)
 
 xSize = 15
 ySize = 15
-seed = 0
+seed = None
 nStep = 20000
 maxBorderSpikeSize = 2
 includeTile = "inCell\\"
-excludeTile = "U_cell longU_cell Z2_cell"
 show = False
 help = False
 
@@ -22,7 +21,6 @@ paramList = [
     "--nstep",
     "--maxborderspkikesize",
     "--includetile",
-    #"--excludetile",
     "--help",
     "--show"
 ]
@@ -50,11 +48,8 @@ for i in range(0, len(param), 2):
             maxBorderSpikeSize = int(val)
         case "--includetile":
             includeTile = val.split()
-        #case "--excludetile":
-        #    excludeTile = val.split() if val.lower() != "none" else None
         case "--help":
             help = True if val.lower() == "true" else False
-            break
         case "--show":
             show = True if val.lower() == "true" else False
         case _:
@@ -71,17 +66,7 @@ else:
     for tile in includeTile:
         tileList.append(mazeGen.readTiles(f"inCell\\{tile}.tile"))
 
-#if excludeTile is not None:
-#    tileList = set([tuple(map(tuple, arr)) for arr in tileList])
-#    
-#    for tile in excludeTile:
-#        tileArr:np.ndarray = tuple(mazeGen.readTiles(f"inCell\\{tile}.tile"))
-#        tileList.remove(tuple(map(tuple, tileArr)))
-#        
-#    tileList = [np.array(tup) for tup in tileList]
-
-
-grid = mazeGen.placeInGrid(tileList, xSize, ySize, seed=seed, nStep=nStep)
+grid = mazeGen.placeInGrid(tileList, int.__ceil__(xSize//2)+1, int.__ceil__(ySize//2)+1, seed=seed, nStep=nStep)
 grid = mazeGen.extendGrid(grid)
 grid = mazeGen.removeBorderSpike(grid, maxLength=2)
 

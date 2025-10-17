@@ -12,8 +12,10 @@ paramDict = {
     "--maxborderspikesize": 2,
     "--includespecialtile": None,
     "--excludeall": False,
+    "--xsymmetric": True,
+    "--ysymmetric": True,
     "--help": False,
-    "--show": False
+    "--show": False,
 }
 
 if len(param) % 2 != 0:
@@ -30,7 +32,7 @@ for i in range(0, len(param), 2):
         paramDict[index] = int(val)
     elif index == "--includespecialtile":
         paramDict[index] = val.split()
-    elif index in ["--help", "--show", "--excludeall"]:
+    elif index in ["--help", "--show", "--excludeall", "--xsymmetric", "--ysymmetric"]:
         paramDict[index] = True if val.lower() == "true" else False
 
 if paramDict["--help"]:
@@ -45,8 +47,19 @@ if paramDict["--includespecialtile"] is not None:
     for tile in paramDict["--includespecialtile"]:
         tileList.append(mazeGen.readTiles(f"inCell\\{tile}.tile"))
 
-grid = mazeGen.placeInGrid(tileList, int.__ceil__(paramDict["--xsize"]//2)+1, int.__ceil__(paramDict["--ysize"]//2)+1, seed=paramDict["--seed"], nStep=paramDict["--nstep"])
-grid = mazeGen.extendGrid(grid)
+
+if paramDict["--xsymmetric"] and paramDict["--ysymmetric"]:
+    grid = mazeGen.placeInGrid(tileList, int.__ceil__(paramDict["--xsize"]//2)+1, int.__ceil__(paramDict["--ysize"]//2)+1, seed=paramDict["--seed"], nStep=paramDict["--nstep"])
+    grid = mazeGen.extendGrid(grid)
+elif paramDict["--xsymmetric"]:
+    grid = mazeGen.placeInGrid(tileList, int.__ceil__(paramDict["--xsize"]//2)+1, paramDict["--ysize"], seed=paramDict["--seed"], nStep=paramDict["--nstep"])
+    grid = mazeGen.symmetric(grid)
+elif paramDict["--ysymmetric"]:
+    grid = mazeGen.placeInGrid(tileList, paramDict["--xsize"], int.__ceil__(paramDict["--ysize"]//2)+1, seed=paramDict["--seed"], nStep=paramDict["--nstep"])
+    grid = mazeGen.symmetric(grid, axis=1)
+else: 
+    grid = mazeGen.placeInGrid(tileList, paramDict["--xsize"], paramDict["--ysize"], seed=paramDict["--seed"], nStep=paramDict["--nstep"])
+
 grid = mazeGen.removeBorderSpike(grid, maxLength=2)
 grid = mazeGen.remove8connexity(grid, paramDict["--seed"])
 

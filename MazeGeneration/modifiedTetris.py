@@ -2,8 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-from MazeGeneration.metrics.MazeMetrics_Tetris import print_maze_structure_metrics
-
 import json
 
 
@@ -19,7 +17,8 @@ def importTiles(rootPath:str = "inCell\\") ->list[np.ndarray[int]]:
     # Retrieve and parse all the tiles in a folder
     tileList = []
     for inputFile in os.listdir(rootPath):
-        tileList.append(readTiles(rootPath+inputFile))
+        #tileList.append(readTiles(rootPath+inputFile))
+        tileList.append(readTiles(os.path.join(rootPath, inputFile)))
     return tileList
 
 def rotateTile(tile:np.ndarray[int], k:int = 1) -> np.ndarray[int]:
@@ -134,8 +133,6 @@ if __name__ == "__main__":
     grid = extendGrid(grid)
 
     showGrid(grid)
-
-    print_maze_structure_metrics(grid)
 
     grid = removeBorderSpike(grid, maxLength=2)
     showGrid(grid)

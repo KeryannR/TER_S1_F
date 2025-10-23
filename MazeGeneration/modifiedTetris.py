@@ -13,13 +13,14 @@ def readTiles(path:str) -> np.ndarray[int]:
             tile.append([int(i) for i in row.strip().split(" ")])
         return np.array(tile)
 
-def importTiles(rootPath:str = "inCell\\", excludeSpecial:bool = True) ->list[np.ndarray[int]]:
+def importTiles(rootPath: str = "inCell", excludeSpecial: bool = True) -> list[np.ndarray[int]]:
     # Retrieve and parse all the tiles in a folder
     tileList = []
     for inputFile in os.listdir(rootPath):
         if excludeSpecial and inputFile.startswith("special_"):
             continue
-        tileList.append(readTiles(rootPath+inputFile))
+        tile_path = os.path.join(rootPath, inputFile)
+        tileList.append(readTiles(tile_path))
     return tileList
 
 def rotateTile(tile:np.ndarray[int], k:int = 1) -> np.ndarray[int]:

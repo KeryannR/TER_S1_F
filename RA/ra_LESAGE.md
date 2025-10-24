@@ -35,4 +35,9 @@ https://shaunlebron.github.io/pacman-mazegen/
 #### Implementation:
 - Implémentation d'un wrapper pour l'appel du fichier de génration de Maze à partir du terminal avec des paramètres (permettra de simplifier l'implémentation finale de l'API).
 - Retrait d'un bug engendrant de la 8-connexité lorsqu'une symétrie était impliquée ou que l'on retirait les border spikes (voir séance 2).
-- Début de l'implémentation de pièces large pour plus ressembler à PACMAN...  
+- Début de l'implémentation de pièces large pour plus ressembler à PACMAN... \[spoiler: marche pas vraiment\]
+
+### Fourth session:
+#### Implementation:
+- Implémentation d'une fonction de score pour l'évaluation automatique de labyrinthe PACMAN. Ce score se base sur les mériques calculés précédemment (proportion de cul-de-sac, chemin droit, carrefour, virage, jonctions) et les compare avec un cosinus de similarité sur ces mêmes métriques calculés sur plusieurs labyrinthes pacman rééls.  
+

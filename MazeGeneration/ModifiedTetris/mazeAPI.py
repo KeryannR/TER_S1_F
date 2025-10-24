@@ -1,7 +1,9 @@
-from flask import Flask, request, jsonify, json
+from flask import Flask, request, jsonify
 import modifiedTetris as mazeGen
+import mazeDB as db
 import numpy as np
 import os
+import json
 
 app = Flask(__name__)
 
@@ -16,59 +18,65 @@ def home():
 
 @app.route('/generate', methods=['GET'])
 def generate_maze():
-    try:
-        # recup param dans l’URL
-        xSize = int(request.args.get("xSize", 15))
-        ySize = int(request.args.get("ySize", 15))
-        seed = request.args.get("seed", None)
-        seed = int(seed) if seed is not None else None
-        nStep = int(request.args.get("nStep", 20000))
-        maxBorderSpikeSize = int(request.args.get("maxBorderSpikeSize", 2))
-        includeTile = request.args.getlist("includeTile")
-        show = request.args.get("show", "false").lower() == "true"
+    # recup param dans l’URL
+    xSize = int(request.args.get("xSize", 15))
+    ySize = int(request.args.get("ySize", 15))
+    seed = request.args.get("seed", None)
+    seed = int(seed) if seed is not None else None
+    nStep = int(request.args.get("nStep", 20000))
+    maxBorderSpikeSize = int(request.args.get("maxBorderSpikeSize", 2))
+    includeTile = request.args.getlist("includeTile") #includeTile=...&includeTile=...&includeTile=...
+    show = request.args.get("show", "false").lower() == "true"
 
-        #chargement tile
-        inCell_dir = os.path.join(os.path.dirname(__file__), "inCell")
-        if not includeTile:
-            tileList = mazeGen.importTiles(inCell_dir)
-        else:
-            tileList = []
-            for tile in includeTile:
-                tile_name = os.path.basename(tile)
-                tile_path = os.path.join(inCell_dir, f"{tile_name}.tile")
-                if not os.path.exists(tile_path):
-                    raise FileNotFoundError(f"Tile file not found: {tile_path}")
-                tileList.append(mazeGen.readTiles(tile_path))
+    #chargement tile
+    inCell_dir = os.path.join(os.path.dirname(__file__), "inCell")
+    if not includeTile:
+        tileList = mazeGen.importTiles(inCell_dir)
+    else:
+        tileList = []
+        for tile in includeTile:
+            tile_name = os.path.basename(tile)
+            tile_path = os.path.join(inCell_dir, f"{tile_name}.tile")
+            if not os.path.exists(tile_path):
+                raise FileNotFoundError(f"Tile file not found: {tile_path}")
+            tileList.append(mazeGen.readTiles(tile_path))
 
-        # genere maze
-        grid = mazeGen.placeInGrid(
-            tileList,
-            int(np.ceil(xSize // 2)) + 1,
-            int(np.ceil(ySize // 2)) + 1,
-            seed=seed,
-            nStep=nStep
-        )
+    # genere maze
+    grid = mazeGen.placeInGrid(
+        tileList,
+        int(np.ceil(xSize // 2)) + 1,
+        int(np.ceil(ySize // 2)) + 1,
+        seed=seed,
+        nStep=nStep
+    )
 
-        grid = mazeGen.extendGrid(grid)
-        grid = mazeGen.removeBorderSpike(grid, maxLength=maxBorderSpikeSize)
+    grid = mazeGen.extendGrid(grid)
+    grid = mazeGen.removeBorderSpike(grid, maxLength=maxBorderSpikeSize)
 
-        result = mazeGen.exportToJSON(grid)
+    #result = mazeGen.exportToJSON(grid)
+    result = mazeGen.exportToJSON(grid)
+    if isinstance(result, str):
+        result = json.loads(result)
 
-        # parse JSON string to dict
-        if isinstance(result, str):
-            try:
-                result = json.loads(result)
-            except json.JSONDecodeError:
-                result = {"error": "Invalid JSON output from exportToJSON"}
+    # ajout de l'id + options dans le JSON final
+    result["options"] = {
+        "seed": seed,
+        "xSize": xSize,
+        "ySize": ySize,
+        "nStep": nStep,
+        "maxBorderSpikeSize": maxBorderSpikeSize,
+        "includeTile": includeTile,
+        "show": show
+    }
 
-        if show:
-            mazeGen.showGrid(grid)
+    if show:
+        mazeGen.showGrid(grid)
+    
+    db.insert_maze(result)
+    inserted_id = db.insert_maze(result)
+    result["_id"] = str(inserted_id)
 
-        return jsonify(result)
-
-    # error handling
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    return jsonify(result)
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))

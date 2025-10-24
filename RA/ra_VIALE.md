@@ -23,3 +23,8 @@
 #### Implementations:
 - Implementation of Flask in maze generation (`mazeAPI.py`)
 - Start of render implementation
+
+### 4. Fourth session:
+#### Implementations:
+- End of render implementation
+- create mazeDB with mongodb

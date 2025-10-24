@@ -45,3 +45,16 @@ None this session — the focus was on testing and validation of the existing co
 - Improved test readability with descriptive comments.
 - Verified maze generation consistency across multiple seeds and configuration parameters.
 - Confirmed full JSON compatibility for API deployment.
+
+
+### Fourth session
+#### Research:
+- Studied how to test Flask APIs using unittest and Flask’s test client.
+- Investigated CI/CD strategies for Python projects on GitHub, including automated test execution on push/pull requests.
+
+#### Implementations:
+- Developed a dedicated test suite (tests/test_mazeAPI.py) for the Flask API to: Test default maze generation, Test reproducibility with a fixed seed...
+- Ensured skipped tests for optional resources to allow smooth CI/CD execution.
+- Verified that the API responses are consistent, correct, and JSON-serializable.
+- Researched and prepared steps to integrate CI/CD using GitHub Actions, including setting up automated test runs on push or pull requests.
+

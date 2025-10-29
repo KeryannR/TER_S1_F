@@ -1,3 +1,14 @@
 .venv/
 .idea
 __pycache__
+doc/presentation/presentation.aux
+doc/presentation/presentation.bcf
+doc/presentation/presentation.fdb_latexmk
+doc/presentation/presentation.fls
+doc/presentation/presentation.log
+doc/presentation/presentation.nav
+doc/presentation/presentation.out
+doc/presentation/presentation.run.xml
+doc/presentation/presentation.snm
+doc/presentation/presentation.synctex.gz
+doc/presentation/presentation.toc

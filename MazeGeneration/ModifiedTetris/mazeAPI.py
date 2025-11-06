@@ -71,8 +71,7 @@ def generate_maze():
 
     if show:
         mazeGen.showGrid(grid)
-    
-    db.insert_maze(result)
+
     inserted_id = db.insert_maze(result)
     result["_id"] = str(inserted_id)
 

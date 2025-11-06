@@ -3,11 +3,6 @@ from pymongo.server_api import ServerApi
 
 CONNECTION_STRING = "mongodb+srv://pacmaz_user:9c2URk5VXXpQG5X8@maze.t1in5bv.mongodb.net/?appName=Maze"
 
-#client = MongoClient(CONNECTION_STRING)
-#client = MongoClient(CONNECTION_STRING, server_api=ServerApi('1'))
-#db = client["Mazes"]
-#collection = db["maze"]
-
 def insert_maze(json_data):
     if not isinstance(json_data, dict):
         raise ValueError("Le paramètre doit être un dictionnaire JSON valide.")

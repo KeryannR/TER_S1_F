@@ -2,6 +2,12 @@
 
 % Libraries
 \usepackage{xcolor}
+\usepackage{ragged2e}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{animate}
 
 % Themes
 \usetheme{Arguelles}
@@ -16,11 +22,15 @@
   \vspace{40pt}
 }
 
+% Allow optional arguments after frame.
+\apptocmd{\frame}{}{\justifying}{} 
+
 % Title page
 \title{G\'en\'eration de labyrinthes PACMAN}
 \subtitle{TER S5, M1 Informatique}
 \date{7 Novembre 2025}
 \author{Lesage Arno, Razafindrabe Keryann, Viale Jean-Jacques}
+\github{KeryannR/TER\_S1\_F}
 \event{}
 \date{}
 \institute{EUR DS4H - Universit\'e C\^ote d'Azur}
@@ -39,19 +49,71 @@
     \end{frame}
     \section{\textbf{1. Algorithmes de g\'en\'eration}}
 
-        % Create frame at will in section
+        % What is a PACMAN Game ?
         \begin{frame}[t]
-            \frametitle{A random title}
-            \framesubtitle{A random subtitle}
-            Some random text
+            \frametitle{Qu'est ce qu'un labyrinthe PACMAN ?}
+            \begin{columns}
+                \begin{column}{0.5\textwidth}
+                    \vspace{20pt}
+                    \begin{figure}[H]
+                        \centering
+                        \includegraphics[width=0.7\textwidth]{logo/PACMAN.jpg}
+                        \caption{Un labyrinthe PACMAN}
+                        \label{fig:pacman.png}
+                    \end{figure}
+                \end{column}
+                \begin{column}{0.5\textwidth}
+                    \justifying
+                    Un labyrinthe PACMAN est générallement caractérisé par :
+                    \vspace{10pt}
+                    \begin{itemize}
+                        \item La présence de boucles,
+                        \item La présence de zones inaccessibles,
+                        \item Une 4-connexité,
+                        \item Une presque symmétrie.
+                    \end{itemize}
+                \end{column}
+            \end{columns}
+        \end{frame}
+
+        \begin{frame}[t]
+            \justifying
+            \frametitle{Un premier algo : \textit{Hunt \& Kill}}
+            \begin{columns}
+                \begin{column}{0.7\textwidth}
+                    \begin{algorithm}[H]
+                        \caption{\textit{Hunt \& Kill}}
+                        \begin{algorithmic}[1]
+                            \State $\forall (x,y)\in[\![1,n]\!]\times[\![1,m]\!] : c_{x,y}\gets 0$
+                            \State Choisir une cellule $c$ aléatoirement
+                            \While{$\exists(x,y) : c_{x,y}=0$}
+                                \State $c_{x,y}\gets 1$
+                                \State Choisir un voisin $c' : c'_{x,y} = 0$
+                                \State $c \gets c'$; $c_{x,y}\gets 1$
+                                \State Chercher $c : \exists(x,y)\ c'_{x,y}=0$
+                            \EndWhile
+                        \end{algorithmic}
+                    \end{algorithm}
+                    Problèmes : 
+                    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+                        \item Labyrinthes parfaits,
+                        \item Possible biai sur les bords,
+                        \item Ne ressemble pas vraiment à PACMAN
+                    \end{itemize}
+                \end{column}
+                \begin{column}{0.4\textwidth}
+                    \animategraphics[width=1\linewidth]{10}{logo/HuntAndKillFrame/frame_}{0001}{0112}
+                    \vspace{30pt}
+                \end{column}
+            \end{columns}
         \end{frame}
 
     % Second section
     \begin{frame}[standout, plain]
         \centering\large
-        \textbf{\scshape 2. \'Evaluation des labyrinthes et m\'etriques}
+        \textbf{\scshape 2. \'Evaluation et m\'etriques}
     \end{frame}
-    \section{\textbf{2. \'Evaluation des labyrinthes et m\'etriques}}
+    \section{\textbf{2. \'Evaluation et m\'etriques}}
 
         % Create frame at will in section
 
@@ -76,10 +138,27 @@
     % Fifth section
     \begin{frame}[standout, plain]
         \centering\large
-        \textbf{\scshape 5. GitHub et organisation du projet}
+        \textbf{\scshape 5. PACMAN}
     \end{frame}
-    \section{\textbf{5. GitHub et organisation du projet}}
+    \section{\textbf{5. PACMAN}}
 
         % Create frame at will in section
+
+    % Six section
+    \begin{frame}[standout, plain]
+        \centering\large
+        \textbf{\scshape 6. GitHub et collaboration}
+    \end{frame}
+    \section{\textbf{6. GitHub et collaboration}}
+
+        % Create frame at will in section
+
+
+    \End
+    \begin{frame}[plain,standout]
+        \centering
+        \textbf{\scshape Merci de votre attention !}
+        \vfill
+    \end{frame}
 
 \end{document}

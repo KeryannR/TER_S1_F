@@ -58,3 +58,17 @@ None this session — the focus was on testing and validation of the existing co
 - Verified that the API responses are consistent, correct, and JSON-serializable.
 - Researched and prepared steps to integrate CI/CD using GitHub Actions, including setting up automated test runs on push or pull requests.
 
+### Fifth session
+#### Research:
+- Investigated CI/CD workflows for Python projects on GitHub.
+- Studied how to integrate automated tests in a CI/CD pipeline using GitHub Actions.
+- Explored best practices for structuring tests so that CI/CD pipelines can reliably detect failures.
+- Learned about status checks, branch protection rules, and how CI/CD can block merges when tests fail.
+
+### Implementations:
+- Created a simple automated test (test_simple_cicd.py) for the API to validate that the generated maze has the correct size.
+- Configured a GitHub Actions workflow (.github/workflows/maze-ci.yml) to automatically run this test on push or pull requests to main.
+- Ensured the workflow installs dependencies (Flask, NumPy) before running the test.
+- Verified that the test passes when the code is correct and fails if the code is broken.
+- Tested the CI/CD pipeline to confirm that merges to main are blocked when the automated test fails.
+- Documented the CI/CD setup as a foundation for future integration of the full test suite.

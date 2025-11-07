@@ -94,6 +94,7 @@ def get_corner_positions(grid):
                         break
     return valid_corners
 
+# --> A UTILISER POURS LES PORTAILS <--
 def get_portals(grid):
     portals = []
     for y, row in enumerate(grid):
@@ -106,7 +107,6 @@ def get_portals(grid):
 def main():
     global pellets,score
     pacman = PacMan(grid, CELL_SIZE)
-
     corner_positions = get_corner_positions(grid)
 
     for y, row in enumerate(grid):

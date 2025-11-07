@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 import modifiedTetris as mazeGen
 import mazeDB as db
 import numpy as np
@@ -74,6 +74,24 @@ def generate_maze():
 
     inserted_id = db.insert_maze(result)
     result["_id"] = str(inserted_id)
+
+    return jsonify(result)
+
+@app.route('/get', methods=['GET'])
+def get_maze():
+    # recup param dans l’URL
+    maze_id = request.args.get("id")    
+
+    if not maze_id:
+        abort(400, description="ID missing in request")
+
+    # recup doc dans MongoDB
+    result = db.get_maze_by_id(maze_id)
+
+    if not result:
+        abort(404, description="No maze match this ID")
+
+    result["_id"] = str(result["_id"])
 
     return jsonify(result)
 

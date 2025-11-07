@@ -21,6 +21,8 @@ def generate_maze():
     # recup param dans l’URL
     xSize = int(request.args.get("xSize", 15))
     ySize = int(request.args.get("ySize", 15))
+    minScore = float(request.args.get("minScore", 0))
+    nPortal = int(request.args.get("nPortal", 1))
     seed = request.args.get("seed", None)
     seed = int(seed) if seed is not None else None
     nStep = int(request.args.get("nStep", 20000))
@@ -41,17 +43,29 @@ def generate_maze():
                 raise FileNotFoundError(f"Tile file not found: {tile_path}")
             tileList.append(mazeGen.readTiles(tile_path))
 
-    # genere maze
-    grid = mazeGen.placeInGrid(
-        tileList,
-        int(np.ceil(xSize // 2)) + 1,
-        int(np.ceil(ySize // 2)) + 1,
-        seed=seed,
-        nStep=nStep
-    )
+    # Generate maze according to required score
+    score = -1
+    while score <= minScore:
+        grid = mazeGen.placeInGrid(
+            tileList,
+            int(np.ceil(xSize // 2)) + 1,
+            int(np.ceil(ySize // 2)) + 1,
+            seed=seed,
+            nStep=nStep
+        )
+        grid = mazeGen.extendGrid(grid)
 
-    grid = mazeGen.extendGrid(grid)
-    grid = mazeGen.removeBorderSpike(grid, maxLength=maxBorderSpikeSize)
+        grid = mazeGen.placePhantomBase(grid)
+        grid = mazeGen.removeBorderSpike(grid, maxLength=maxBorderSpikeSize)
+        grid = mazeGen.remove8connexity(grid, seed)
+        if nPortal >= 1:
+            grid = mazeGen.placePortal(grid, nPortal)
+        
+        # Ensure that if a score is not achieved and the seed don't change, then break to avoid infinite loop
+        if seed is None:
+            break
+        
+        score = mazeGen.score.getScore(grid)
 
     #result = mazeGen.exportToJSON(grid)
     result = mazeGen.exportToJSON(grid)

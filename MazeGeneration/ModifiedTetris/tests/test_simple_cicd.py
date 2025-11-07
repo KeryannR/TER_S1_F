@@ -19,14 +19,19 @@ class TestBasicMaze(unittest.TestCase):
         test_id = "690d1d58b9055ebd0f144bb6"
         response = self.client.get(f'/get?id={test_id}')
         self.assertEqual(response.status_code, 200)
+
         data = response.get_json()
+        self.assertIsInstance(data, list)
+        self.assertGreater(len(data), 0, "Aucun document renvoyé par l'API")
+
+        maze = data[0]
 
         for key in ["_id", "grid", "height", "width", "legend", "options"]:
-            self.assertIn(key, data)
+            self.assertIn(key, maze)
 
-        self.assertEqual(data["_id"], test_id)
+        self.assertEqual(maze["_id"], test_id)
 
-        grid = np.array(data["grid"])
+        grid = np.array(maze["grid"])
         self.assertEqual(grid.shape, (15, 15))
 
         self.assertTrue(np.all(np.isin(grid, [0, 1])))

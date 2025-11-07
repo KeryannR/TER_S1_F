@@ -64,6 +64,8 @@ None this session — the focus was on testing and validation of the existing co
 - Studied how to integrate automated tests in a CI/CD pipeline using GitHub Actions.
 - Explored best practices for structuring tests so that CI/CD pipelines can reliably detect failures.
 - Learned about status checks, branch protection rules, and how CI/CD can block merges when tests fail.
+- Continued research on extending the project from procedural maze generation to graphical representation using Pygame.
+- Studied how classic Pac-Man mechanics are implemented: player movement, pellets power, and score display.
 
 ### Implementations:
 - Created a simple automated test (test_simple_cicd.py) for the API to validate that the generated maze has the correct size.
@@ -72,3 +74,15 @@ None this session — the focus was on testing and validation of the existing co
 - Verified that the test passes when the code is correct and fails if the code is broken.
 - Tested the CI/CD pipeline to confirm that merges to main are blocked when the automated test fails.
 - Documented the CI/CD setup as a foundation for future integration of the full test suite.
+- Added Pac-Man movement logic with directional controls and grid-based collision detection.
+- Introduced score tracking with a retro arcade font (ARCADE_N.ttf) and dynamic rendering at the top of the screen.
+  - +10 points per normal pellet.
+  - +50 points per power pellet.
+- Refined Pac-Man’s spawn logic
+
+#### Outcome:
+- CI/CD
+- Power pellets can be collected.
+- Logic movement Pac-Man
+- Score updates dynamically on screen.
+- Pac-Man spawns under the ghost cage.

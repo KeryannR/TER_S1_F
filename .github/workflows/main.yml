@@ -25,4 +25,4 @@ jobs:
 
       - name: Run basic test
         run: |
-          python -m unittest MazeGeneration/tests/test_simple_cicd.py -v
+          python -m unittest MazeGeneration/ModifiedTetris/tests/test_simple_cicd.py -v

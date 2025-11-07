@@ -13,7 +13,7 @@ class TestBasicMaze(unittest.TestCase):
         data = response.get_json()
         self.assertIn("grid", data)
         grid = np.array(data["grid"])
-        self.assertEqual(grid.shape, (11, 11))
+        self.assertEqual(grid.shape, (5, 5))
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -201,14 +201,15 @@ def exportToJSON(grid:np.ndarray[int], outPath:str = None) -> str|None:
 if __name__ == "__main__":
     X_MAX = Y_MAX = 15
     tileList = importTiles("inCell\\")
-    grid = placeInGrid(tileList, X_MAX, Y_MAX, seed=100, nStep=20000)
+    grid = placeInGrid(tileList, X_MAX, Y_MAX, seed=0, nStep=20000)
     grid = extendGrid(grid)
 
     showGrid(grid)
     grid = placePhantomBase(grid)
     grid = removeBorderSpike(grid, maxLength=2)
-    grid = remove8connexity(grid, seed=100)
-    grid = placePortal(grid, 2)
+    grid = remove8connexity(grid, seed=0)
+    grid = placePortal(grid, 1)
+    print(score.getScore(grid))
     showGrid(grid)
     exportToJSON(grid, "test.json")
 

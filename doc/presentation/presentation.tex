@@ -44,148 +44,150 @@
     \frame[plain]{\tableofcontents, \frametitle{\textcolor{white}{\textbf{Sommaire}}}}
 
     % Set up part frame and sections
-    \begin{frame}[standout, plain]
-        \centering\large
-        \textbf{\scshape 1. Algorithmes de g\'en\'eration}
-    \end{frame}
-    \section{\textbf{1. Algorithmes de g\'en\'eration}}
-
-        % What is a PACMAN Game ?
-        \begin{frame}[t]
-            \frametitle{Qu'est ce qu'un labyrinthe PACMAN ?}
-            \begin{columns}
-                \begin{column}{0.5\textwidth}
-                    \vspace{20pt}
-                    \begin{figure}[H]
-                        \centering
-                        \includegraphics[width=0.7\textwidth]{logo/PACMAN.jpg}
-                        \caption{Un labyrinthe PACMAN}
-                        \label{fig:pacman.png}
-                    \end{figure}
-                \end{column}
-                \begin{column}{0.5\textwidth}
-                    \justifying
-                    Un labyrinthe PACMAN est générallement caractérisé par :
-                    \vspace{10pt}
-                    \begin{itemize}
-                        \item La présence de boucles,
-                        \item La présence de zones inaccessibles,
-                        \item Une 4-connexité,
-                        \item Une presque symmétrie.
-                    \end{itemize}
-                \end{column}
-            \end{columns}
-        \end{frame}
-
-        \begin{frame}[t]
-            \justifying
-            \frametitle{Un premier algo : \textit{Hunt \& Kill}}
-            \begin{columns}
-                \begin{column}{0.7\textwidth}
-                    \begin{algorithm}[H]
-                        \caption{\textit{Hunt \& Kill}}
-                        \begin{algorithmic}[1]
-                            \State $\forall (x,y)\in[\![1,n]\!]\times[\![1,m]\!] : c_{x,y}\gets 0$
-                            \State Choisir une cellule $c$ aléatoirement
-                            \While{$\exists(x,y) : c_{x,y}=0$}
-                                \State $c_{x,y}\gets 1$
-                                \State Choisir un voisin $c' : c'_{x,y} = 0$
-                                \State $c \gets c'$; $c_{x,y}\gets 1$
-                                \State Chercher $c : \exists(x,y)\ c'_{x,y}=0$
-                            \EndWhile
-                        \end{algorithmic}
-                    \end{algorithm}
-                    Problèmes : 
-                    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-                        \item Labyrinthes parfaits,
-                        \item Possible biai sur les bords,
-                        \item Ne ressemble pas vraiment à PACMAN...
-                    \end{itemize}
-                \end{column}
-                \begin{column}{0.4\textwidth}
-                    \animategraphics[width=1\linewidth]{10}{logo/HuntAndKillFrame/frame_}{0001}{0112}
-                    \vspace{30pt}
-                \end{column}
-            \end{columns}
-        \end{frame}
-
-        \begin{frame}[t]
-            \frametitle{Une deuxième idée...}
-            \framesubtitle{Tetris}
-            \begin{columns}
-                \begin{column}{0.5\textwidth}
-                    \vspace{10pt}
-                    \begin{figure}[H]
-                        \centering
-                        \includegraphics[width=1\textwidth]{logo/tiles.png}
-                        \caption{Quelques Polyominos}
-                        \label{fig:tiles.png}
-                    \end{figure}
-                \end{column}
-                \begin{column}{0.5\textwidth}
-                    \vspace{20pt}
-                    \begin{figure}[H]
-                        \centering
-                        \includegraphics[width=1\textwidth]{logo/OriginalTetris.png}
-                        \caption{\href{https://shaunlebron.github.io/pacman-mazegen/}{Résultat ?}}
-                        \label{fig:OriginalTetris.png}
-                    \end{figure}
-                \end{column}
-            \end{columns}
-        \end{frame}
-
-        \begin{frame}[t]
-            \frametitle{Modified Tetris : \textit{Algorithme}}
-            \framesubtitle{Tetris}
-            \begin{algorithm}[H]
-                \caption{\textit{Modified Tetris}}
-                \begin{algorithmic}[1]
-                    \State Soit $\mathbb{P}$ l'ensemble des polyominos disponibles
-                    \For{$i=0,\ i<n,\ (n\in\mathbb{N})$}
-                        \State Choisi $p\in\mathbb{P}$
-                        \State Faire $m\in\mathbb{N}$ rotations à $p$
-                        \State Choisir une zone $(x,x',y,y')$ de forme $p$
-                        \If{$\exists(c_{x,y})\in(x,x',y,y') : c_{x,y}=1$}
-                            \State \textbf{continue}
-                        \EndIf
-                        \State Placer $p$ dans $(x,x',y,y')$
-                    \EndFor
-                    \State Placer la cage aux fantômes
-                    \State Retirer les "spikes" aux bords
-                    \State Retirer la 8-connexité
-                    \State Placer les portails
-                \end{algorithmic}
-            \end{algorithm}
-        \end{frame}
-
-        \begin{frame}[t]
-            \begin{figure}[H]
-                \centering
-                \frametitle{Modified Tetris : \textit{Résultat}}
-                \framesubtitle{Tetris}
-                \includegraphics[width=0.70\textwidth]{logo/ModifiedTetris.png}
-                \caption{Résultat de l'algo \textit{Modified Tetris}}
-                \label{fig:ModifiedTetris.png}
-            \end{figure}
-        \end{frame}
+    %\begin{frame}[standout, plain]
+    %    \centering\large
+    %    \textbf{\scshape 1. Algorithmes de g\'en\'eration}
+    %\end{frame}
+    %\section{\textbf{1. Algorithmes de g\'en\'eration}}
+    %
+    %    % What is a PACMAN Game ?
+    %    \begin{frame}[t]
+    %        \frametitle{Qu'est ce qu'un labyrinthe PACMAN ?}
+    %        \begin{columns}
+    %            \begin{column}{0.5\textwidth}
+    %                \vspace{20pt}
+    %                \begin{figure}[H]
+    %                    \centering
+    %                    \includegraphics[width=0.7\textwidth]{logo/PACMAN.jpg}
+    %                    \caption{Un labyrinthe PACMAN}
+    %                    \label{fig:pacman.png}
+    %                \end{figure}
+    %            \end{column}
+    %            \begin{column}{0.5\textwidth}
+    %                \justifying
+    %                Un labyrinthe PACMAN est générallement caractérisé par :
+    %                \vspace{10pt}
+    %                \begin{itemize}
+    %                    \item La présence de boucles,
+    %                    \item La présence de zones inaccessibles,
+    %                    \item Une 4-connexité,
+    %                    \item Une presque symmétrie.
+    %                \end{itemize}
+    %            \end{column}
+    %        \end{columns}
+    %    \end{frame}
+    %
+    %    \begin{frame}[t]
+    %        \justifying
+    %        \frametitle{Un premier algo : \textit{Hunt \& Kill}}
+    %        \begin{columns}
+    %            \begin{column}{0.7\textwidth}
+    %                \begin{algorithm}[H]
+    %                    \caption{\textit{Hunt \& Kill}}
+    %                    \begin{algorithmic}[1]
+    %                       \State $\forall (x,y)\in[\![1,n]\!]\times[\![1,m]\!] : c_{x,y}\gets 0$
+    %                        \State Choisir une cellule $c$ aléatoirement
+    %                        \While{$\exists(x,y) : c_{x,y}=0$}
+    %                            \State $c_{x,y}\gets 1$
+    %                            \State Choisir un voisin $c' : c'_{x,y} = 0$
+    %                            \State $c \gets c'$; $c_{x,y}\gets 1$
+    %                            \State Chercher $c : \exists(x,y)\ c'_{x,y}=0$
+    %                        \EndWhile
+    %                    \end{algorithmic}
+    %                \end{algorithm}
+    %                Problèmes : 
+    %                \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+    %                    \item Labyrinthes parfaits,
+    %                    \item Possible biai sur les bords,
+    %                    \item Ne ressemble pas vraiment à PACMAN...
+    %                \end{itemize}
+    %            \end{column}
+    %            \begin{column}{0.4\textwidth}
+    %                \animategraphics[width=1\linewidth]{10}{logo/HuntAndKillFrame/frame_}{0001}{0112}
+    %                \vspace{30pt}
+    %            \end{column}
+    %        \end{columns}
+    %    \end{frame}
+    %
+    %    \begin{frame}[t]
+    %        \frametitle{Une deuxième idée...}
+    %        \framesubtitle{Tetris}
+    %        \begin{columns}
+    %            \begin{column}{0.5\textwidth}
+    %                \vspace{10pt}
+    %                \begin{figure}[H]
+    %                    \centering
+    %                    \includegraphics[width=1\textwidth]{logo/tiles.png}
+    %                    \caption{Quelques Polyominos}
+    %                    \label{fig:tiles.png}
+    %                \end{figure}
+    %            \end{column}
+    %            \begin{column}{0.5\textwidth}
+    %                \vspace{20pt}
+    %                \begin{figure}[H]
+    %                    \centering
+    %                    \includegraphics[width=1\textwidth]{logo/OriginalTetris.png}
+    %                    \caption{\href{https://shaunlebron.github.io/pacman-mazegen/}{Résultat ?}}
+    %                    \label{fig:OriginalTetris.png}
+    %                \end{figure}
+    %            \end{column}
+    %        \end{columns}
+    %    \end{frame}
+    %
+    %    \begin{frame}[t]
+    %        \frametitle{Modified Tetris : \textit{Algorithme}}
+    %        \framesubtitle{Tetris}
+    %        \begin{algorithm}[H]
+    %            \caption{\textit{Modified Tetris}}
+    %            \begin{algorithmic}[1]
+    %                \State Soit $\mathbb{P}$ l'ensemble des polyominos disponibles
+    %                \For{$i=0,\ i<n,\ (n\in\mathbb{N})$}
+    %                    \State Choisi $p\in\mathbb{P}$
+    %                    \State Faire $m\in\mathbb{N}$ rotations à $p$
+    %                    \State Choisir une zone $(x,x',y,y')$ de forme $p$
+    %                    \If{$\exists(c_{x,y})\in(x,x',y,y') : c_{x,y}=1$}
+    %                        \State \textbf{continue}
+    %                    \EndIf
+    %                    \State Placer $p$ dans $(x,x',y,y')$
+    %                \EndFor
+    %                \State Placer la cage aux fantômes
+    %                \State Retirer les "spikes" aux bords
+    %                \State Retirer la 8-connexité
+    %                \State Placer les portails
+    %            \end{algorithmic}
+    %        \end{algorithm}
+    %    \end{frame}
+    %
+    %    \begin{frame}[t]
+    %        \begin{figure}[H]
+    %            \centering
+    %            \frametitle{Modified Tetris : \textit{Résultat}}
+    %            \framesubtitle{Tetris}
+    %            \includegraphics[width=0.70\textwidth]{logo/ModifiedTetris.png}
+    %            \caption{Résultat de l'algo \textit{Modified Tetris}}
+    %            \label{fig:ModifiedTetris.png}
+    %        \end{figure}
+    %    \end{frame}
 
 
 
     % Second section
     \begin{frame}[standout, plain]
         \centering\large
-        \textbf{\scshape 2. \'Evaluation et m\'etriques}
+        \textbf{\scshape 1. \'Evaluation et m\'etriques}
     \end{frame}
-    \section{\textbf{2. \'Evaluation et m\'etriques}}
+    \section{\textbf{1. \'Evaluation et m\'etriques}}
 
         % Create frame at will in section
+        %% Dire pourquoi les métriques marches
 
+        
     % Third section
     \begin{frame}[standout, plain]
         \centering\large
-        \textbf{\scshape 3. API}
+        \textbf{\scshape 2. API}
     \end{frame}
-    \section{\textbf{3. API}}
+    \section{\textbf{2. API}}
     
          % Create frame at will in section
         \begin{frame}[t]
@@ -194,7 +196,7 @@
             L'API permet de générer dynamiquement des labyrinthes PACMAN en utilisant des paramètres personnalisés.  
             \vspace{10pt}
             \textbf{Points clés :}
-            \begin{itemize}
+            \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
                 \item \textbf{Endpoint :} \texttt{/generate} (GET)
                 \item Paramètres :
                     \begin{itemize}[noitemsep,topsep=0pt]
@@ -208,7 +210,7 @@
                 %\item Intégration : possibilité de sauvegarder le labyrinthe dans la base de données MongoDB
             \end{itemize}
             \vspace{5pt}
-            \textbf{Exemple d'utilisation :} \texttt{/generate?xSize=15\&ySize=15\&nStep=20000\&show=true}
+            \textbf{Exemple :} \texttt{/generate?xSize=30\&ySize=30\&nStep=20000}
         \end{frame}
 
 
@@ -216,29 +218,30 @@
     % Fourth section
     \begin{frame}[standout, plain]
         \centering\large
-        \textbf{\scshape 4. Tests}
+        \textbf{\scshape 3. Tests}
     \end{frame}
-    \section{\textbf{4. Tests}}
+    \section{\textbf{3. Tests}}
 
         % Create frame at will in section
 
     % Fifth section
     \begin{frame}[standout, plain]
         \centering\large
-        \textbf{\scshape 5. PACMAN}
+        \textbf{\scshape 4. PACMAN}
     \end{frame}
-    \section{\textbf{5. PACMAN}}
+    \section{\textbf{4. PACMAN}}
 
         % Create frame at will in section
 
     % Six section
     \begin{frame}[standout, plain]
         \centering\large
-        \textbf{\scshape 6. GitHub et collaboration}
+        \textbf{\scshape 5. GitHub et collaboration}
     \end{frame}
-    \section{\textbf{6. GitHub et collaboration}}
+    \section{\textbf{5. GitHub et collaboration}}
 
         % Create frame at will in section
+        %% Mettre le comit graph
 
 
     \End

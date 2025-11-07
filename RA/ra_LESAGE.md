@@ -46,3 +46,4 @@ https://shaunlebron.github.io/pacman-mazegen/
 #### Implementation:
 - Finalisation de la métrique du cosinus de similarité avec des seuils pour faire un map vers les entiers de 0 à 5,
 - Mise en place de la boite aux fantômes et des téléporteurs
+-  LaTeX Beamer

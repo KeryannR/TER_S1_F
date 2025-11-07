@@ -2,8 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 
-import json
+import referenceMaze.ScoreMaze as score
 
+import json
 
 def readTiles(path:str) -> np.ndarray[int]:
     # Open and parse the tile format
@@ -123,7 +124,48 @@ def remove8connexity(grid:np.ndarray, seed:int = None) -> np.ndarray[int]:
                     grid[row, col+1] = 0
                 else:
                     grid[row+1, col] = 0
-    return  grid
+    return grid
+
+def placePhantomBase(grid:np.ndarray[int]) -> np.ndarray[int]:
+    grid = grid.copy()
+    phantomBase = np.array([
+        [0,0,0,0,0,0,0],
+        [0,1,1,2,1,1,0],
+        [0,1,2,2,2,1,0],
+        [0,1,1,1,1,1,0],
+        [0,0,0,0,0,0,0]
+    ])
+    
+    x, y = grid.shape[0]//2, grid.shape[1]//2
+    dx, dy = phantomBase.shape[0]//2, phantomBase.shape[1]//2
+    
+    grid[x-dx:x+dx+1, y-dy:y+dy+1] = phantomBase
+    return grid
+
+def placePortal(grid:np.ndarray[int], quantity:int) -> np.ndarray[int]:
+    grid = grid.copy()
+    XMAX = grid.shape[0]
+    YMAX = grid.shape[1]
+    if quantity == 0:
+        return grid
+    for i in range(1, quantity+1):
+        if i == 1:
+            grid[max(XMAX//2-1,0), (0,1,YMAX-1,YMAX-2)] = 1
+            grid[min(XMAX//2+1, XMAX-1), (0,1,YMAX-1, YMAX-2)] = 1
+            grid[XMAX//2, (1,2, YMAX-2, YMAX-3)] = 0
+            grid[XMAX//2, (0, YMAX-1)] = 3
+        elif i%2 == 0:
+            grid[max(XMAX//(2*i)-1,0), (0,1,YMAX-1,YMAX-2)] = 1
+            grid[min(XMAX//(2*i)+1, XMAX-1), (0,1,YMAX-1, YMAX-2)] = 1
+            grid[XMAX//(2*i), (1,2, YMAX-2, YMAX-3)] = 0
+            grid[XMAX//(2*i), (0, YMAX-1)] = 3
+        elif i%2 == 1:
+            grid[max(XMAX - XMAX//(2*i-1)-1,0), (0,1,YMAX-1,YMAX-2)] = 1
+            grid[min(XMAX - XMAX//(2*i-1)+1, XMAX-1), (0,1,YMAX-1, YMAX-2)] = 1
+            grid[XMAX - XMAX//(2*i-1), (1,2, YMAX-2, YMAX-3)] = 0
+            grid[XMAX - XMAX//(2*(i-1)), (0, YMAX-1)] = 3
+    
+    return grid
 
 def showGrid(grid:np.ndarray) -> None:
     plt.matshow(grid, cmap="grey")
@@ -135,9 +177,14 @@ def exportToJSON(grid:np.ndarray[int], outPath:str = None) -> str|None:
                 "width": grid.shape[1],
                 "height": grid.shape[0],
                 "grid": grid.tolist(),
+                "score": score.getScore(grid),
+                "adjustedScore": score.getAdjustedScore(grid),
+                "metrics": score.met.compute_maze_structure_metrics(grid),
                 "legend": {
                     "0": "path",
-                    "1": "wall"
+                    "1": "wall",
+                    "2": "phantom",
+                    "3": "portal"
                 }
     }
     
@@ -158,8 +205,10 @@ if __name__ == "__main__":
     grid = extendGrid(grid)
 
     showGrid(grid)
-
+    grid = placePhantomBase(grid)
     grid = removeBorderSpike(grid, maxLength=2)
+    grid = remove8connexity(grid, seed=100)
+    grid = placePortal(grid, 2)
     showGrid(grid)
     exportToJSON(grid, "test.json")
 

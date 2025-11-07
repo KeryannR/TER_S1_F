@@ -1,10 +1,10 @@
 import metrics.MazeMetrics_Tetris as met
-import modifiedTetris as mazeGen
+#import modifiedTetris as mazeGen
 import numpy as np
 import json
 import os
 
-from modifiedTetris import showGrid
+#from modifiedTetris import showGrid
 
 if not os.path.exists("referenceMaze\\metricReference.json"):
     refGrid = {"deadEnd":{"avg":0}, "straight":{"avg":0}, "turn":{"avg":0}, "junction":{"avg":0}, "crossroad":{"avg":0}}
@@ -35,21 +35,34 @@ def getScore(grid:np.ndarray) -> float:
     score = np.dot(gridToTestMetrics, gridReferenceMetrics)/(np.linalg.norm(gridReferenceMetrics)*np.linalg.norm(gridToTestMetrics))
     return score*5
 
+def getAdjustedScore(grid:np.ndarray) -> int:
+    gridScore = getScore(grid)
+    if gridScore < 2:
+        return 0
+    if gridScore < 2.5:
+        return 1
+    if gridScore < 3:
+        return 2
+    if gridScore < 3.5:
+        return 3
+    if gridScore < 4:
+        return 4
+    return 5
+
 if __name__ == "__main__":
-    tileList = mazeGen.importTiles("inCell\\", excludeSpecial=False)
-    count = 0
-    while True:
-        grid = mazeGen.placeInGrid(tileList, 15, 15, None, nStep=1000)
-        grid = mazeGen.extendGrid(grid)
-        grid = mazeGen.removeBorderSpike(grid, maxLength=2)
-        grid = mazeGen.remove8connexity(grid)
-        score = getScore(grid)
-        
-        if not count % 10:
-            print(f"mazeGenerated: {count}, {score=}")
-        if score > 3.5:
-            showGrid(grid)
-            print(score)
-            break
-        
-        count += 1
+    ...
+    # tileList = mazeGen.importTiles("inCell\\", excludeSpecial=False)
+    # count = 0
+    # while True:
+    #   grid = mazeGen.placeInGrid(tileList, 15, 15, None, nStep=1000)
+    #   grid = mazeGen.extendGrid(grid)
+    #   grid = mazeGen.removeBorderSpike(grid, maxLength=2)
+    #   grid = mazeGen.remove8connexity(grid)
+    #   score = getScore(grid)
+    #   if not count % 10:
+    #       print(f"mazeGenerated: {count}, {score=}")
+    #   if score > 3.5:
+    #       showGrid(grid)
+    #       print(score)
+    #       break
+    #   count += 1

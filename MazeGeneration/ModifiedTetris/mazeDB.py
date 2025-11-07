@@ -25,29 +25,42 @@ def insert_maze(json_data):
     finally:
         client.close()
 
-def get_maze_by_id(id_str):
+def get_maze_by_fields(filters, limit=None):
     try:
         client = MongoClient(CONNECTION_STRING, server_api=ServerApi('1'))
         db = client["Mazes"]
         collection = db["maze"]
 
-        # convert string -> ObjectId
-        object_id = ObjectId(id_str)
+        query = {}
 
-        # chercher doc correspondant
-        document = collection.find_one({"_id": object_id})
+        # conversion de l'ID
+        if "_id" in filters:
+            try:
+                query["_id"] = ObjectId(filters["_id"])
+            except errors.InvalidId:
+                print("L'ID fourni n'est pas un ObjectId valide.")
+        # ajouter les autres champs
+        for key, value in filters.items():
+            if key != "_id":
+                query[key] = value
 
-        if document:
-            print("Document trouvé :")
-            print(document)
-            return document
+        print(f"Recherche avec filtre : {query}")
+
+        cursor = collection.find(query)
+        if limit:
+            cursor = cursor.limit(limit)
+
+        results = list(cursor)
+
+        if results:
+            print(f"{len(results)} document(s) trouvé(s).")
+            return results
         else:
-            print("Aucun document trouvé avec cet ID.")
+            print("Aucun document trouvé.")
             return None
 
-    except errors.InvalidId:
-        print("L'ID fourni n'est pas un ObjectId valide.")
     except Exception as e:
         print(f"Erreur lors de la recherche : {e}")
+        return None
     finally:
         client.close()

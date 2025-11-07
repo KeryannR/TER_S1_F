@@ -28,3 +28,9 @@
 #### Implementations:
 - End of render implementation
 - create mazeDB with mongodb
+
+### 5. Fifth session:
+#### Implementations:
+- Correction MongoDB + add get route
+- Pacman player + inputs handling
+- Pellets

@@ -94,18 +94,62 @@ def generate_maze():
 @app.route('/get', methods=['GET'])
 def get_maze():
     # recup param dans l’URL
-    maze_id = request.args.get("id")    
+    filters = {}
 
-    if not maze_id:
-        abort(400, description="ID missing in request")
+    maze_id = request.args.get("id")
+    if maze_id:
+        filters["_id"] = maze_id
 
-    # recup doc dans MongoDB
-    result = db.get_maze_by_id(maze_id)
+    score = request.args.get("score")
+    if score:
+        filters["adjustedScore"] = int(score)
+
+    xSize = request.args.get("xSize")
+    if xSize:
+        filters["options.xSize"] = int(xSize)
+
+    ySize = request.args.get("ySize")
+    if ySize:
+        filters["options.ySize"] = int(ySize)
+
+    seed = request.args.get("seed")
+    if seed:
+        filters["options.seed"] = int(seed)
+
+    nStep = request.args.get("nStep")
+    if nStep:
+        filters["options.nStep"] = int(nStep)
+
+    nPortal = request.args.get("nPortal")
+    if nPortal:
+        filters["options.nPortal"] = int(nStep)
+
+    maxBorderSpikeSize = request.args.get("maxBorderSpikeSize")
+    if maxBorderSpikeSize:
+        filters["options.maxBorderSpikeSize"] = int(maxBorderSpikeSize)
+
+    includeTile = request.args.getlist("includeTile")
+    if includeTile:
+        filters["options.includeTile"] = {"$in": includeTile}  # recherche par inclusion
+
+    limit = request.args.get("limit")
+    if limit:
+        try:
+            limit = int(limit)
+        except ValueError:
+            abort(400, description="Le paramètre 'limit' doit être un entier.")
+    else:
+        limit = None
+
+    # req mongo avec champs non vides
+    result = db.get_maze_by_fields(filters, limit=limit)
 
     if not result:
-        abort(404, description="No maze match this ID")
+        abort(404, description="Aucun labyrinthe ne correspond à ces critères")
 
-    result["_id"] = str(result["_id"])
+    # convert ObjectId -> str
+    for r in result:
+        r["_id"] = str(r["_id"])
 
     return jsonify(result)
 

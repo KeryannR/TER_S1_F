@@ -5,13 +5,11 @@ import json
 import os
 
 #from modifiedTetris import showGrid
-
-if not os.path.exists("referenceMaze\\metricReference.json"):
+if not os.path.exists(os.path.join("referenceMaze", "metricReference.json")):
     refGrid = {"deadEnd":{"avg":0}, "straight":{"avg":0}, "turn":{"avg":0}, "junction":{"avg":0}, "crossroad":{"avg":0}}
 
-
     count = 0
-    for key in ["referenceMaze\\pacman1.json", "referenceMaze\\pacman2.json", "referenceMaze\\pacman3.json"]:
+    for key in [os.path.join("referenceMaze", "pacman1.json"), os.path.join("referenceMaze", "pacman2.json"), os.path.join("referenceMaze", "pacman3.json")]:
         with open(key) as file:
             refGrid["deadEnd"][key], refGrid["straight"][key], refGrid["turn"][key], refGrid["junction"][key], refGrid["crossroad"][key] = met.compute_maze_structure_metrics(np.array(json.load(file)["refGrid"])).values()
         
@@ -19,12 +17,11 @@ if not os.path.exists("referenceMaze\\metricReference.json"):
             if metric != "pacmanGrid":
                 refGrid[metric]["avg"] = (count*refGrid[metric]["avg"]+refGrid[metric][key])/(count+1)
         count +=1
-
-    with open("referenceMaze\\metricReference.json", "w") as file:
+    with open(os.path.join("referenceMaze", "metricReference.json"), "w") as file:
         json.dump(refGrid, file)
 
 else:
-    with open("referenceMaze\\metricReference.json") as file:
+    with open(os.path.join("referenceMaze", "metricReference.json")) as file:
         refGrid = json.load(file)
 
 

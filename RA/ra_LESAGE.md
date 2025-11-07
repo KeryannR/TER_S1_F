@@ -42,3 +42,7 @@ https://shaunlebron.github.io/pacman-mazegen/
 - Implémentation d'une fonction de score pour l'évaluation automatique de labyrinthe PACMAN. Ce score se base sur les mériques calculés précédemment (proportion de cul-de-sac, chemin droit, carrefour, virage, jonctions) et les compare avec un cosinus de similarité sur ces mêmes métriques calculés sur plusieurs labyrinthes pacman rééls.
 - Refactorisation du GitHub
 
+### Fifth session:
+#### Implementation:
+- Finalisation de la métrique du cosinus de similarité avec des seuils pour faire un map vers les entiers de 0 à 5,
+- Mise en place de la boite aux fantômes et des téléporteurs

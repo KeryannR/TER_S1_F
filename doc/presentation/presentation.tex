@@ -8,6 +8,7 @@
 \usepackage{graphicx}
 \usepackage{float}
 \usepackage{animate}
+\usepackage{hyperref}
 
 % Themes
 \usetheme{Arguelles}
@@ -98,7 +99,7 @@
                     \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
                         \item Labyrinthes parfaits,
                         \item Possible biai sur les bords,
-                        \item Ne ressemble pas vraiment à PACMAN
+                        \item Ne ressemble pas vraiment à PACMAN...
                     \end{itemize}
                 \end{column}
                 \begin{column}{0.4\textwidth}
@@ -107,6 +108,68 @@
                 \end{column}
             \end{columns}
         \end{frame}
+
+        \begin{frame}[t]
+            \frametitle{Une deuxième idée...}
+            \framesubtitle{Tetris}
+            \begin{columns}
+                \begin{column}{0.5\textwidth}
+                    \vspace{10pt}
+                    \begin{figure}[H]
+                        \centering
+                        \includegraphics[width=1\textwidth]{logo/tiles.png}
+                        \caption{Quelques Polyominos}
+                        \label{fig:tiles.png}
+                    \end{figure}
+                \end{column}
+                \begin{column}{0.5\textwidth}
+                    \vspace{20pt}
+                    \begin{figure}[H]
+                        \centering
+                        \includegraphics[width=1\textwidth]{logo/OriginalTetris.png}
+                        \caption{\href{https://shaunlebron.github.io/pacman-mazegen/}{Résultat ?}}
+                        \label{fig:OriginalTetris.png}
+                    \end{figure}
+                \end{column}
+            \end{columns}
+        \end{frame}
+
+        \begin{frame}[t]
+            \frametitle{Modified Tetris : \textit{Algorithme}}
+            \framesubtitle{Tetris}
+            \begin{algorithm}[H]
+                \caption{\textit{Modified Tetris}}
+                \begin{algorithmic}[1]
+                    \State Soit $\mathbb{P}$ l'ensemble des polyominos disponibles
+                    \For{$i=0,\ i<n,\ (n\in\mathbb{N})$}
+                        \State Choisi $p\in\mathbb{P}$
+                        \State Faire $m\in\mathbb{N}$ rotations à $p$
+                        \State Choisir une zone $(x,x',y,y')$ de forme $p$
+                        \If{$\exists(c_{x,y})\in(x,x',y,y') : c_{x,y}=1$}
+                            \State \textbf{continue}
+                        \EndIf
+                        \State Placer $p$ dans $(x,x',y,y')$
+                    \EndFor
+                    \State Placer la cage aux fantômes
+                    \State Retirer les "spikes" aux bords
+                    \State Retirer la 8-connexité
+                    \State Placer les portails
+                \end{algorithmic}
+            \end{algorithm}
+        \end{frame}
+
+        \begin{frame}[t]
+            \begin{figure}[H]
+                \centering
+                \frametitle{Modified Tetris : \textit{Résultat}}
+                \framesubtitle{Tetris}
+                \includegraphics[width=0.70\textwidth]{logo/ModifiedTetris.png}
+                \caption{Résultat de l'algo \textit{Modified Tetris}}
+                \label{fig:ModifiedTetris.png}
+            \end{figure}
+        \end{frame}
+
+
 
     % Second section
     \begin{frame}[standout, plain]
@@ -125,6 +188,30 @@
     \section{\textbf{3. API}}
     
          % Create frame at will in section
+        \begin{frame}[t]
+            \frametitle{Génération de labyrinthes via l'API}
+            \justifying
+            L'API permet de générer dynamiquement des labyrinthes PACMAN en utilisant des paramètres personnalisés.  
+            \vspace{10pt}
+            \textbf{Points clés :}
+            \begin{itemize}
+                \item \textbf{Endpoint :} \texttt{/generate} (GET)
+                \item Paramètres :
+                    \begin{itemize}[noitemsep,topsep=0pt]
+                        \item \texttt{xSize}, \texttt{ySize} : dimensions du labyrinthe
+                        \item \texttt{seed} : graine aléatoire pour la reproductibilité
+                        \item \texttt{nStep} : nombre d'itérations pour la génération
+                        \item \texttt{maxBorderSpikeSize} : taille maximale des prolongements de bord
+                        \item \texttt{includeTile} : inclusion de tuiles "spéciales"
+                    \end{itemize}
+                \item Retour : JSON contenant le labyrinthe, les métriques et les options de génération
+                %\item Intégration : possibilité de sauvegarder le labyrinthe dans la base de données MongoDB
+            \end{itemize}
+            \vspace{5pt}
+            \textbf{Exemple d'utilisation :} \texttt{/generate?xSize=15\&ySize=15\&nStep=20000\&show=true}
+        \end{frame}
+
+
 
     % Fourth section
     \begin{frame}[standout, plain]

@@ -1,4 +1,4 @@
-name: MazeGeneration CI
+name: MazeGeneration CICD
 
 on:
   push:

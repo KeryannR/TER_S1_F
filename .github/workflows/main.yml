@@ -1,4 +1,4 @@
-name: MazeGeneration CICD
+name: MazeGeneration CI
 
 on:
   push:
@@ -20,8 +20,9 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
+        working-directory: MazeGeneration
         run: |
-          pip install flask numpy
+          pip install -r requirements.txt
 
       - name: Run basic test
         working-directory: MazeGeneration/ModifiedTetris

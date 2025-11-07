@@ -4,12 +4,15 @@ import numpy as np
 import json
 import os
 
-#from modifiedTetris import showGrid
-if not os.path.exists(os.path.join("referenceMaze", "metricReference.json")):
+base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+metric_ref_file = os.path.join(base_dir, "referenceMaze", "metricReference.json")
+
+if not os.path.exists(metric_ref_file):
     refGrid = {"deadEnd":{"avg":0}, "straight":{"avg":0}, "turn":{"avg":0}, "junction":{"avg":0}, "crossroad":{"avg":0}}
 
     count = 0
-    for key in [os.path.join("referenceMaze", "pacman1.json"), os.path.join("referenceMaze", "pacman2.json"), os.path.join("referenceMaze", "pacman3.json")]:
+    pacman_files = ["pacman1.json", "pacman2.json", "pacman3.json"]
+    for key in pacman_files:
         with open(key) as file:
             refGrid["deadEnd"][key], refGrid["straight"][key], refGrid["turn"][key], refGrid["junction"][key], refGrid["crossroad"][key] = met.compute_maze_structure_metrics(np.array(json.load(file)["refGrid"])).values()
         
@@ -17,13 +20,12 @@ if not os.path.exists(os.path.join("referenceMaze", "metricReference.json")):
             if metric != "pacmanGrid":
                 refGrid[metric]["avg"] = (count*refGrid[metric]["avg"]+refGrid[metric][key])/(count+1)
         count +=1
-    with open(os.path.join("referenceMaze", "metricReference.json"), "w") as file:
+    with open(metric_ref_file, "w") as file:
         json.dump(refGrid, file)
 
 else:
-    with open(os.path.join("referenceMaze", "metricReference.json")) as file:
+    with open(metric_ref_file) as file:
         refGrid = json.load(file)
-
 
 
 def getScore(grid:np.ndarray) -> float:

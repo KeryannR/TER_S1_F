@@ -8,6 +8,7 @@ from pellet import Pellet
 # chargement du labyrinthe depuis le JSON
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 json_path = os.path.join(BASE_DIR, "test_maze.json")
+font_path = os.path.join(BASE_DIR, "font", "ARCADE_N.ttf")
 
 with open(json_path, "r") as f:
     data = json.load(f)
@@ -24,6 +25,14 @@ ROWS = len(grid)
 COLS = len(grid[0])
 
 pygame.init()
+
+#display score
+font_score = pygame.font.Font(font_path, 20)
+
+def draw_score(window, score):
+    text = font_score.render(f"SCORE: {score}", True, (255, 255, 255))
+    window.blit(text, (10, 10))
+
 
 # obtenir la taille de l’écran
 screen_info = pygame.display.Info()
@@ -64,15 +73,50 @@ def draw_grid():
     for pellet in pellets:
         pellet.draw(window)
 
+# retourne les positions valides pour les coins
+def get_corner_positions(grid):
+    corners = [
+        (0, 0),
+        (0, len(grid)-1),
+        (len(grid[0])-1, 0),
+        (len(grid[0])-1, len(grid)-1)
+    ]
+    valid_corners = []
+    for x, y in corners:
+        if grid[y][x] == 0:
+            valid_corners.append((x, y))
+        else:
+            for dy in range(-1, 2):
+                for dx in range(-1, 2):
+                    nx, ny = x + dx, y + dy
+                    if 0 <= nx < len(grid[0]) and 0 <= ny < len(grid) and grid[ny][nx] == 0:
+                        valid_corners.append((nx, ny))
+                        break
+    return valid_corners
+
+def get_portals(grid):
+    portals = []
+    for y, row in enumerate(grid):
+        for x, cell in enumerate(row):
+            if cell == 3:
+                portals.append((x, y))
+    return portals
+
+
 def main():
-    global score
+    global pellets,score
     pacman = PacMan(grid, CELL_SIZE)
+
+    corner_positions = get_corner_positions(grid)
 
     for y, row in enumerate(grid):
         for x, cell in enumerate(row):
             if cell == 0:  # chemins
                 pellets.append(Pellet(x, y, CELL_SIZE))
-
+    # placer les power pellets dans les coins
+    for x, y in corner_positions:
+        pellets = [p for p in pellets if not (p.x == x and p.y == y)]
+        pellets.append(Pellet(x, y, CELL_SIZE, is_power=True))
 
     running = True
     while running:
@@ -83,25 +127,32 @@ def main():
         # inputs handling
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
-            pacman.move(0, -1)
+            pacman.set_direction(0, -1)
         elif keys[pygame.K_DOWN]:
-            pacman.move(0, 1)
+            pacman.set_direction(0, 1)
         elif keys[pygame.K_LEFT]:
-            pacman.move(-1, 0)
+            pacman.set_direction(-1, 0)
         elif keys[pygame.K_RIGHT]:
-            pacman.move(1, 0)
+            pacman.set_direction(1, 0)
+
+        # déplacer pacman à chaque frame
+        pacman.move()
 
         # pellet mangé ?
         for pellet in pellets:
             if not pellet.eaten and pellet.x == pacman.x and pellet.y == pacman.y:
-                pellet.eat()
-                score += 10
+                is_power = pellet.eat()
+                score += 50 if is_power else 10
+                if is_power:
+                    pacman.activate_power(duration=50)
+                    print("POWER MODE")
                 print("SCORE -->" + str(score))
 
 
         window.fill(BLACK)
         draw_grid()
         pacman.draw(window)
+        draw_score(window, score)
         pygame.display.flip()
         clock.tick(10)
 

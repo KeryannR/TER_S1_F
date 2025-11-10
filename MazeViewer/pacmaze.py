@@ -4,6 +4,7 @@ import json
 import os
 from pacman import PacMan
 from pellet import Pellet
+from ghost import Ghost
 
 # chargement du labyrinthe depuis le JSON
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -34,7 +35,7 @@ def draw_score(window, score):
     window.blit(text, (10, 10))
 
 
-# obtenir la taille de l’écran
+# obtenir la taille de l'écran
 screen_info = pygame.display.Info()
 SCREEN_WIDTH = screen_info.current_w
 SCREEN_HEIGHT = screen_info.current_h
@@ -108,6 +109,7 @@ def main():
     global pellets,score
     pacman = PacMan(grid, CELL_SIZE)
     corner_positions = get_corner_positions(grid)
+    ghosts = [Ghost(grid, CELL_SIZE, i) for i in range(4)]
 
     for y, row in enumerate(grid):
         for x, cell in enumerate(row):
@@ -137,6 +139,8 @@ def main():
 
         # déplacer pacman à chaque frame
         pacman.move()
+        for ghost in ghosts:
+            ghost.move()
 
         # pellet mangé ?
         for pellet in pellets:
@@ -146,12 +150,14 @@ def main():
                 if is_power:
                     pacman.activate_power(duration=50)
                     print("POWER MODE")
-                print("SCORE -->" + str(score))
+                #print("SCORE -->" + str(score))
 
 
         window.fill(BLACK)
         draw_grid()
         pacman.draw(window)
+        for ghost in ghosts:
+            ghost.draw(window)
         draw_score(window, score)
         pygame.display.flip()
         clock.tick(10)

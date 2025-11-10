@@ -14,7 +14,7 @@ class PacMan:
         self.move_delay = 1.5
         self.move_counter = 0
 
-        # ----> POSITION A AMELIORER : POSITION DE SPAWN PLUS PRECISE <----
+    # ----> POSITION A AMELIORER : POSITION DE SPAWN PLUS PRECISE <----
     def find_start_position(self):
         # trouve toutes les lignes où il y a des 2
         cage_lines = []

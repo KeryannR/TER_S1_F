@@ -4,8 +4,6 @@ import numpy as np
 import json
 import os
 
-from scipy.spatial.distance import euclidean
-
 base_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 metric_ref_file = os.path.join(base_dir, "referenceMaze", "metricReference.json")
 

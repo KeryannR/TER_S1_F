@@ -53,3 +53,4 @@ https://shaunlebron.github.io/pacman-mazegen/
 - Mise en place de la possibilité d'écraser des pièces lors de la génération du labyrinthes (ne le fait pas par défaut et est lié à une probabilité).
 - Mise à jour de la métrique d'évaluation des labyrinthes pour éliminer les labyrinthes ayant trop de carrefours, de chemin ou de murs.
 - Ajout à la métrique d'évaluation de poids (possiblement optimisable) pour accorder plus ou moins d'importance à la ressemblance pour une métrique données.
+- Retire la 8-connexité définitvement

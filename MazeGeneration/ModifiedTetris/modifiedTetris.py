@@ -263,8 +263,8 @@ if __name__ == "__main__":
     grid = placePortal(grid, 1, voidBeforePortal=3)
     
     print(score.getScore(grid))
-    #score.met.print_maze_structure_metrics(grid)
+    score.met.print_maze_structure_metrics(grid)
     showGrid(grid)
     
-    exportToJSON(grid, "test.json")
+    #exportToJSON(grid, "test.json")
 

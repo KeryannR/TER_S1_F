@@ -6,9 +6,11 @@
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
 \usepackage{graphicx}
+\usepackage{amsmath,bm}
 \usepackage{float}
 \usepackage{animate}
 \usepackage{hyperref}
+\usepackage[font=small,labelfont=bf]{caption}
 
 % Themes
 \usetheme{Arguelles}
@@ -169,25 +171,12 @@
     %        \end{figure}
     %    \end{frame}
 
-
-
-    % Second section
+    % First section
     \begin{frame}[standout, plain]
         \centering\large
-        \textbf{\scshape 1. \'Evaluation et m\'etriques}
+        \textbf{\scshape 1. API}
     \end{frame}
-    \section{\textbf{1. \'Evaluation et m\'etriques}}
-
-        % Create frame at will in section
-        %% Dire pourquoi les métriques marches
-
-        
-    % Third section
-    \begin{frame}[standout, plain]
-        \centering\large
-        \textbf{\scshape 2. API}
-    \end{frame}
-    \section{\textbf{2. API}}
+    \section{\textbf{1. API}}
     
     % --- Slide pour l'endpoint / ---
     \begin{frame}[t, fragile]
@@ -307,16 +296,149 @@ GET /get?xSize=30&ySize=30&limit=5
 
 
 
-    % Fourth section
+    % Second section
     \begin{frame}[standout, plain]
         \centering\large
-        \textbf{\scshape 3. Tests}
+        \textbf{\scshape 2. Tests}
     \end{frame}
-    \section{\textbf{3. Tests}}
+    \section{\textbf{2. Tests}}
 
         % Create frame at will in section
 
-    % Fifth section
+
+    % Third section
+    \begin{frame}[standout, plain]
+        \centering\large
+        \textbf{\scshape 3. \'Evaluation et m\'etriques}
+    \end{frame}
+    \section{\textbf{3. \'Evaluation et m\'etriques}}
+
+        % Create frame at will in section
+        %% Dire pourquoi les métriques marches
+        \begin{frame}[t]
+            \frametitle{Génération du labyrinthe et métriques}
+            \framesubtitle{Rappel}
+            \justifying
+            \begin{columns}
+                \begin{column}{0.5\textwidth}
+                    \vspace{20pt}
+                    \begin{figure}[H]
+                        \centering
+                        \includegraphics[width=1\textwidth]{logo/AlgoModifiedTetris.png}
+                        \caption{Algorithme Tetris Modifié}
+                        \label{fig:AlgoModifiedTetris.png}
+                    \end{figure}
+                \end{column}
+                \begin{column}{0.5\textwidth}
+                    \textbf{Métriques calculés:}
+                    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+                        \item Proportion de \textbf{carrefour}
+                        \item Proportion de \textbf{jonction}
+                        \item Proportion de \textbf{virage}
+                        \item Proportion de \textbf{ligne droite}
+                        \item Proportion de \textbf{cul-de-sac}
+                        \item Proportion de \textbf{murs}
+                        \item Proportion de \textbf{chemin}
+                    \end{itemize}
+                \end{column}
+            \end{columns}
+            \vspace{-5pt}
+            \textbf{Question :} Comment savoir si un labyrinthe est bon ?
+            \vspace{-5pt}
+            \begin{itemize}[leftmargin=.5in,noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+                \item[1.] \`A la main ? $\longrightarrow$ trop contraignant...
+                \item[2.] Automatiquement ? $\longrightarrow$ oui, mais comment ? 
+            \end{itemize}          
+        \end{frame}
+
+        \begin{frame}[t]
+            \frametitle{Mesure d'évaluation}
+            \framesubtitle{Comparaisons}
+            \begin{figure}
+                \includegraphics[width=.24\textwidth]{logo/pacman1Ref.png}\hfill
+                \includegraphics[width=.24\textwidth]{logo/pacman2Ref.png}\hfill
+                \includegraphics[width=.24\textwidth]{logo/pacman3Ref.png}
+                \caption{Quelques "vrai" PACMAN}
+                \label{fig:somePacman}
+            \end{figure}
+            \begin{columns}
+                \begin{column}[t]{0.5\textwidth}
+                    \textbf{En moyenne :}
+                    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+                        \item \textbf{Carrefours} : 2.034\% ($\uparrow$)
+                        \item \textbf{Jonctions} : 11.863\% ($\uparrow$)
+                        \item \textbf{Virages} : 12.213\%
+                        \item \textbf{Lignes droites} : 72.923\% ($\downarrow$)
+                        \item \textbf{Cul de sac} : 0.967\%
+                    \end{itemize}
+                \end{column}
+                \begin{column}[t]{0.5\textwidth}
+                    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+                        \item \textbf{Murs} : 50.766\% ($\downarrow$)
+                        \item \textbf{Chemins} : 46.647\% ($\uparrow$)
+                    \end{itemize}
+                \end{column}
+            \end{columns}
+        \end{frame}
+        
+        \begin{frame}[t]
+            \frametitle{Mesure d'évaluation}
+            \framesubtitle{Formule}
+            \justifying
+            
+            Soit $\bm{\mu}$ le vecteur de la moyenne des mesures sur les trois labyrinthes et $\bm{x}$ les mesures sur le labyrinthe cible.% et $\bm{w}$ des poids:
+            \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+                \item[] $\bm{\mu}=\left(\mu_\text{cross},\mu_\text{junc},\mu_\text{turn},\mu_\text{straight},\mu_\text{dead},\mu_\text{wall},\mu_\text{path}\right)$
+                \item[] $\bm{x}=\left(x_\text{cross},x_\text{junc},x_\text{turn},x_\text{straight},x_\text{dead},x_\text{wall},x_\text{path}\right)$
+                %\item[] $\bm{w}=\left(w_\text{cross},w_\text{junc},w_\text{turn},w_\text{straight},w_\text{dead},w_\text{wall},w_\text{path}\right) = \bm{1}$
+            \end{itemize}
+
+            \fbox{
+                \parbox{\textwidth}{
+                    Nous définissons $\textbf{score}\left(\bm{\mu},\bm{x}\right)$ comme :
+                    \begin{columns}
+                        \begin{column}[t]{0.43\textwidth}
+                            \centering
+                            $\ \textbf{score}\left(\bm{\mu},\bm{x}\right) = 5\times\frac{\bm{x}\cdot\bm{\mu}}{\|\bm{x}\|\|\bm{\mu}\|}$
+                        \end{column}
+                        \begin{column}{0.57\textwidth}
+                            \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+                                \item[] $\mu_\text{wall} > 0.8 \Rightarrow \textbf{score}\left(\bm{\mu},\bm{x}\right) = 0$
+                                \item[] $\mu_\text{path} > 0.8 \Rightarrow \textbf{score}\left(\bm{\mu},\bm{x}\right) = 0$ 
+                                \item[] $\mu_\text{cross} > 0.15 \Rightarrow \textbf{score}\left(\bm{\mu},\bm{x}\right) = 0$
+                            \end{itemize}
+                        \end{column}
+                    \end{columns}
+                }
+            }
+            
+            \hspace{-20pt}
+            \textbf{Interprétation :}
+            \begin{columns}
+                \begin{column}{0.6\textwidth}
+                    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+                        \item[] Médiocre : $\textbf{score}\left(\bm{\mu},\bm{x}\right) \in [0,2[$
+                        \item[] Très mauvais : $\textbf{score}\left(\bm{\mu},\bm{x}\right) \in [2,2.5[$
+                        \item[] Mauvais : $\textbf{score}\left(\bm{\mu},\bm{x}\right) \in [2.5,3[$
+                    \end{itemize}
+                \end{column}
+                \begin{column}{0.6\textwidth}
+                    \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
+                        \item[] Moyen : $\textbf{score}\left(\bm{\mu},\bm{x}\right) \in [3,3.5[$
+                        \item[] Bon : $\textbf{score}\left(\bm{\mu},\bm{x}\right) \in [3.5,4[$
+                        \item[] Très bon : $\textbf{score}\left(\bm{\mu},\bm{x}\right) \ge 4$
+                    \end{itemize}
+                \end{column}
+            \end{columns}
+        \end{frame}
+        
+        \begin{frame}[t]
+            \frametitle{Mesure d'évaluation}
+            \framesubtitle{Images}
+        \end{frame}
+        
+
+    % Fourth section
     \begin{frame}[standout, plain]
         \centering\large
         \textbf{\scshape 4. PACMAN}
@@ -325,7 +447,7 @@ GET /get?xSize=30&ySize=30&limit=5
 
         % Create frame at will in section
 
-    % Six section
+    % Fifth section
     \begin{frame}[standout, plain]
         \centering\large
         \textbf{\scshape 5. GitHub et collaboration}

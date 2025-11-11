@@ -7,11 +7,13 @@ class PacMan:
         self.grid = grid
         self.cell_size = cell_size
         self.x, self.y = self.find_start_position()
+        self.prev_x, self.prev_y = self.x, self.y 
+        self.start_x, self.start_y = self.x, self.y
         self.direction = (0, 0)
         self.next_direction = (0, 0)
         self.power_mode = False
         self.power_timer = 0
-        self.move_delay = 1.5
+        self.move_delay = 1
         self.move_counter = 0
 
     # ----> POSITION A AMELIORER : POSITION DE SPAWN PLUS PRECISE <----
@@ -55,6 +57,21 @@ class PacMan:
 
         return 0, 0
 
+    def reset_position(self):
+        # si depart en memoire
+        if hasattr(self, "start_x") and hasattr(self, "start_y"):
+            self.x, self.y = self.start_x, self.start_y
+        else:
+            # sinon, on retrouve une position initiale
+            self.x, self.y = self.find_start_position()
+
+        self.prev_x, self.prev_y = self.x, self.y
+        self.direction = (0, 0)
+        self.next_direction = (0, 0)
+        self.power_mode = False
+        self.power_timer = 0
+
+
     def can_move(self, x, y):
         if 0 <= x < len(self.grid[0]) and 0 <= y < len(self.grid):
             return self.grid[y][x] == 0  # 0 = chemin
@@ -65,6 +82,8 @@ class PacMan:
         self.power_timer = duration
 
     def move(self):
+        self.prev_x, self.prev_y = self.x, self.y
+
         self.move_counter += 1
         if self.move_counter < self.move_delay:
             return

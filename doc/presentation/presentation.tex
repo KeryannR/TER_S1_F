@@ -189,29 +189,121 @@
     \end{frame}
     \section{\textbf{2. API}}
     
-         % Create frame at will in section
-        \begin{frame}[t]
-            \frametitle{Génération de labyrinthes via l'API}
-            \justifying
-            L'API permet de générer dynamiquement des labyrinthes PACMAN en utilisant des paramètres personnalisés.  
-            \vspace{10pt}
-            \textbf{Points clés :}
-            \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
-                \item \textbf{Endpoint :} \texttt{/generate} (GET)
-                \item Paramètres :
-                    \begin{itemize}[noitemsep,topsep=0pt]
-                        \item \texttt{xSize}, \texttt{ySize} : dimensions du labyrinthe
-                        \item \texttt{seed} : graine aléatoire pour la reproductibilité
-                        \item \texttt{nStep} : nombre d'itérations pour la génération
-                        \item \texttt{maxBorderSpikeSize} : taille maximale des prolongements de bord
-                        \item \texttt{includeTile} : inclusion de tuiles "spéciales"
-                    \end{itemize}
-                \item Retour : JSON contenant le labyrinthe, les métriques et les options de génération
-                %\item Intégration : possibilité de sauvegarder le labyrinthe dans la base de données MongoDB
-            \end{itemize}
-            \vspace{5pt}
-            \textbf{Exemple :} \texttt{/generate?xSize=30\&ySize=30\&nStep=20000}
-        \end{frame}
+    % --- Slide pour l'endpoint / ---
+    \begin{frame}[t, fragile]
+        \frametitle{Endpoint /}
+        
+        \textbf{Description :} Vérifie que l'API est en fonctionnement.
+    
+        \textbf{Méthode :} GET
+    
+        \textbf{Paramètres :} Aucun
+    
+        \textbf{Retour :} JSON avec un message de confirmation
+
+        \vspace{25pt}  
+
+        \textbf{Exemple :} 
+        \begin{verbatim}
+    GET /
+    {"message": "Maze Generator API is running!"}
+        \end{verbatim}
+    \end{frame}
+
+    
+    % --- Slide pour l'endpoint /generate ---
+    \begin{frame}[t, fragile]
+        \frametitle{Endpoint /generate}
+    
+        \textbf{Description :} Génère dynamiquement un labyrinthe PACMAN selon les paramètres fournis.
+    
+        \textbf{Méthode :} GET
+    
+        \textbf{Paramètres :}
+        \begin{itemize}[noitemsep]
+            \item \texttt{xSize}, \texttt{ySize} : dimensions du labyrinthe (default 15)
+            \item \texttt{minScore} : score minimal pour le labyrinthe généré
+            \item \texttt{nPortal} : nombre de portails (default 1)
+            \item \texttt{seed} : graine pour reproductibilité
+            \item \texttt{nStep} : nombre d’itérations (default 20000)
+            \item \texttt{maxBorderSpikeSize} : taille max des prolongements de bord
+            \item \texttt{includeTile} : tuiles à inclure
+        \end{itemize}
+
+    \end{frame}
+
+
+    % --- Slide pour le format de résultat de /generate ---
+    \begin{frame}[t, fragile]
+        \frametitle{Format du résultat de /generate}
+
+        \justifying
+        Exemple d'utilisation de la route :  
+    
+         \begin{semiverbatim}
+    GET /generate?xSize=30&ySize=30&nStep=20000
+        \end{semiverbatim}
+        
+        \justifying
+        Le résultat renvoyé par l'API est un JSON structuré :  
+        \scriptsize
+        \begin{verbatim}
+{
+    "_id": "None",
+    "grid": [[0,0,1,...],[...],...],
+    "legend": {"0":"path","1":"wall","2":"phantom","3":"portal"},
+    "metrics": {"Crossroads%":10.26, "Dead-Ends%":1.28, ...},
+    "options": {"xSize":30,"ySize":30,"nStep":2000,...},
+    "score": 2.65
+}
+        \end{verbatim}
+    \end{frame}
+
+
+    % --- Slide pour l'insertion mongodb ---
+    \begin{frame}[t, fragile]
+        \frametitle{Insertion dans MongoDB}
+    
+        \footnotesize
+        Lorsqu'un labyrinthe est inséré dans MongoDB, la base lui attribue automatiquement un \verb|_id| unique.
+        
+        Cet \verb|_id| est récupéré avec le code suivant pour ensuite être ajouté au JSON renvoyé par l'API :
+    
+        \scriptsize
+        \begin{verbatim}
+    inserted_id = collection.insert_one(json_data).inserted_id
+    json_data["_id"] = str(inserted_id)
+        \end{verbatim}
+    
+        \centering
+        \includegraphics[width=0.7\linewidth]{logo/mongodb_screenshot.png}
+    \end{frame}
+    
+
+
+    
+    % --- Slide pour l'endpoint /get ---
+    \begin{frame}[t, fragile]
+        \frametitle{Endpoint /get}
+    
+        \textbf{Description :} Récupère un ou plusieurs labyrinthes depuis la base selon des critères.
+    
+        \textbf{Méthode :} GET
+    
+        \textbf{Paramètres :} id, score, xSize, ySize, seed, nStep, nPortal, maxBorderSpikeSize, includeTile, limit
+    
+        \textbf{Retour :} JSON avec un ou plusieurs labyrinthes correspondant aux filtres.
+    
+        \textbf{Exemple :} 
+        \small
+        \begin{verbatim}
+GET /get?xSize=30&ySize=30&limit=5
+=> [{ maze1 }, { maze2 }, { maze3 }, { maze4 }, { maze5 }]
+        \end{verbatim}
+    \end{frame}
+
+
+
 
 
 

@@ -50,7 +50,10 @@ def createFrame(shape:tuple[int], addTile:np.ndarray[int] = None) -> np.ndarray[
 def placeInGrid(tileList:list[np.ndarray], X_MAX:int = 15, Y_MAX:int = 15, seed:int = 0, nStep = 20000, pReplace:float = 0) -> np.ndarray[int]:
     # Initialise a random number generator and create the grid
     rng = np.random.RandomState(seed)
-    pReplaceRNG = np.random.RandomState(seed+1)
+    if seed is not None:
+        pReplaceRNG = np.random.RandomState(seed+1)
+    else:
+        pReplaceRNG = np.random.RandomState(seed)
     grid = np.zeros((X_MAX,Y_MAX), dtype=int)
     
     # Add tile at random position and rotation nStep times

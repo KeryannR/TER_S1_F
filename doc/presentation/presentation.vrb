@@ -1,0 +1,16 @@
+\frametitle{Endpoint /get}
+
+        \textbf{Description :} Récupère un ou plusieurs labyrinthes depuis la base selon des critères.
+
+        \textbf{Méthode :} GET
+
+        \textbf{Paramètres :} id, score, xSize, ySize, seed, nStep, nPortal, maxBorderSpikeSize, includeTile, limit
+
+        \textbf{Retour :} JSON avec un ou plusieurs labyrinthes correspondant aux filtres.
+
+        \textbf{Exemple :}
+        \small
+        \begin{verbatim}
+GET /get?xSize=30&ySize=30&limit=5
+=> [{ maze1 }, { maze2 }, { maze3 }, { maze4 }, { maze5 }]
+        \end{verbatim}

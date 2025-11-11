@@ -4,7 +4,11 @@ def compute_maze_structure_metrics(grid: np.ndarray) -> dict:
     #calculate % of deadends, straights, turns, junctions, and crossroads
 
     X_MAX, Y_MAX = grid.shape
+    walls = [(x, y) for x in range(X_MAX) for y in range(Y_MAX) if grid[x, y] == 1]
     free_cells = [(x, y) for x in range(X_MAX) for y in range(Y_MAX) if grid[x, y] == 0]
+    
+    wallsProportion = len(walls)/(X_MAX*Y_MAX)
+    pathPropotion = len(free_cells)/(X_MAX*Y_MAX)
 
     dead_ends = straights = turns = junctions = crossroads = 0
 
@@ -33,7 +37,10 @@ def compute_maze_structure_metrics(grid: np.ndarray) -> dict:
 
     total = len(free_cells)
     if total == 0:
-        return {k: 0 for k in ["Dead-Ends%", "Straights%", "Turns%", "Junctions%", "Crossroads%"]}
+        toReturn = {k: 0 for k in ["Dead-Ends%", "Straights%", "Turns%", "Junctions%", "Crossroads%"]}
+        toReturn["Path%"] = 100 * pathPropotion
+        toReturn["Wall%"] = 100 * wallsProportion
+        return toReturn
 
     return {
         "Dead-Ends%": 100 * dead_ends / total,
@@ -41,6 +48,8 @@ def compute_maze_structure_metrics(grid: np.ndarray) -> dict:
         "Turns%": 100 * turns / total,
         "Junctions%": 100 * junctions / total,
         "Crossroads%": 100 * crossroads / total,
+        "Path%": 100 * pathPropotion,
+        "Wall%": 100 * wallsProportion
     }
 
 

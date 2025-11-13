@@ -5,6 +5,7 @@
 \usepackage{ragged2e}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
+\usepackage{subcaption}
 \usepackage{graphicx}
 \usepackage{amsmath,bm}
 \usepackage{float}
@@ -405,7 +406,7 @@ GET /get?xSize=30&ySize=30&limit=5
                             \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
                                 \item[] $\mu_\text{wall} > 0.8 \Rightarrow \textbf{score}\left(\bm{\mu},\bm{x}\right) = 0$
                                 \item[] $\mu_\text{path} > 0.8 \Rightarrow \textbf{score}\left(\bm{\mu},\bm{x}\right) = 0$ 
-                                \item[] $\mu_\text{cross} > 0.15 \Rightarrow \textbf{score}\left(\bm{\mu},\bm{x}\right) = 0$
+                                %\item[] $\mu_\text{cross} > 0.15 \Rightarrow \textbf{score}\left(\bm{\mu},\bm{x}\right) = 0$
                             \end{itemize}
                         \end{column}
                     \end{columns}
@@ -425,8 +426,8 @@ GET /get?xSize=30&ySize=30&limit=5
                 \begin{column}{0.6\textwidth}
                     \begin{itemize}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
                         \item[] Moyen : $\textbf{score}\left(\bm{\mu},\bm{x}\right) \in [3,3.5[$
-                        \item[] Bon : $\textbf{score}\left(\bm{\mu},\bm{x}\right) \in [3.5,4[$
-                        \item[] Très bon : $\textbf{score}\left(\bm{\mu},\bm{x}\right) \ge 4$
+                        \item[] Bien : $\textbf{score}\left(\bm{\mu},\bm{x}\right) \in [3.5,4[$
+                        \item[] Très bien : $\textbf{score}\left(\bm{\mu},\bm{x}\right) \ge 4$
                     \end{itemize}
                 \end{column}
             \end{columns}
@@ -436,10 +437,33 @@ GET /get?xSize=30&ySize=30&limit=5
             \frametitle{Mesure d'évaluation}
             \framesubtitle{Images}
             \begin{figure}
-                \includegraphics[width=.24\textwidth]{logo/pacman1Ref.png}\hfill
-                \includegraphics[width=.24\textwidth]{logo/pacman2Ref.png}\hfill
-                \includegraphics[width=.24\textwidth]{logo/pacman3Ref.png}
-                \caption{Quelques "vrai" PACMAN}
+                \centering
+                \begin{subfigure}[b]{0.24\textwidth}
+                    \includegraphics[width=\textwidth]{logo/GeneratedMazes/score0maze.png}
+                    \caption{Score: 0 [0]}
+                \end{subfigure} \hfill
+                \begin{subfigure}[b]{0.24\textwidth}
+                    \includegraphics[width=\textwidth]{logo/GeneratedMazes/score1maze.png}
+                    \caption{Score: 2.50 [1]}
+                \end{subfigure} \hfill
+                \begin{subfigure}[b]{0.24\textwidth}
+                    \includegraphics[width=\textwidth]{logo/GeneratedMazes/score2maze.png}
+                    \caption{Score: 2.94 [2]}
+                \end{subfigure}
+                \\[\smallskipamount]
+                \begin{subfigure}[b]{0.24\textwidth}
+                    \includegraphics[width=\textwidth]{logo/GeneratedMazes/score3maze.png}
+                    \caption{Score: 3.08 [3]}
+                \end{subfigure} \hfill
+                \begin{subfigure}[b]{0.24\textwidth}
+                    \includegraphics[width=\textwidth]{logo/GeneratedMazes/score4maze.png}
+                    \caption{Score: 3.65 [4]}
+                \end{subfigure} \hfill
+                \begin{subfigure}[b]{0.24\textwidth}
+                    \includegraphics[width=\textwidth]{logo/GeneratedMazes/score5maze.png}
+                    \caption{Score: 4.05 [5]}
+                \end{subfigure} \hfill
+                %\caption{Quelques "vrai" PACMAN}
             \end{figure}
         \end{frame}
         

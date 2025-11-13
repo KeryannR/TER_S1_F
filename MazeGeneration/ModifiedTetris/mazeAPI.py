@@ -62,7 +62,7 @@ def generate_maze():
             grid = mazeGen.placePortal(grid, nPortal)
         
         # Ensure that if a score is not achieved and the seed don't change, then break to avoid infinite loop
-        if seed is None:
+        if seed is not None:
             break
         
         score = mazeGen.score.getScore(grid)

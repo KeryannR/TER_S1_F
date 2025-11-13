@@ -243,6 +243,13 @@ def exportToJSON(grid:np.ndarray[int], outPath:str = None) -> str|None:
             file
         )
 
+def importFromJSON(path:str) -> np.ndarray[int]:
+    with open(path, "r") as file:
+        dic = json.load(file)
+    grid = np.array(dic["grid"], dtype=int)
+    grid = np.reshape(grid, (dic["height"], dic["width"]))
+    return grid
+
 if __name__ == "__main__":
     X_MAX = Y_MAX = 15
     tileList = importTiles("inCell\\")
@@ -267,4 +274,4 @@ if __name__ == "__main__":
     showGrid(grid)
     
     #exportToJSON(grid, "test.json")
-
+    showGrid(importFromJSON(r"C:\Users\arnol\Bureau\Université\Cours\Master Informatique - IA - EUR DS4H\TER\Maze Generation\TER_S1_A\doc\presentation\logo\GeneratedMazes\score0maze.json"))

@@ -310,7 +310,122 @@ GET /get?xSize=30&ySize=30&limit=5
     \end{frame}
     \section{\textbf{2. Tests}}
 
-        % Create frame at will in section
+        % --- Introduction des tests ---
+    \begin{frame}[t]
+        \frametitle{Objectif des tests}
+        \framesubtitle{Pourquoi tester ?}
+        \justifying
+        Les tests permettent de garantir la \textbf{stabilité} et la \textbf{fiabilité} de notre API de génération de labyrinthes.
+        \vspace{10pt}
+        \begin{itemize}[noitemsep,topsep=0pt]
+            \item Vérifier que chaque \textbf{endpoint fonctionne correctement} (`/`, `/generate`, `/get`)
+            \item Assurer la \textbf{cohérence des résultats} entre différentes exécutions
+            \item Tester la \textbf{robustesse face aux paramètres invalides}
+            \item Contrôler la \textbf{performance} de génération
+            \item Automatiser ces vérifications via un pipeline \textbf{CI/CD GitHub Actions}
+        \end{itemize}
+    \end{frame}
+
+    % --- Tests unitaires de l'API ---
+    \begin{frame}[t, fragile]
+        \frametitle{Tests unitaires de l'API}
+        \framesubtitle{Fichier : \texttt{test\_mazeAPI.py}}
+        \justifying
+        Les tests unitaires reposent sur le module \texttt{unittest}. Ils vérifient chaque fonctionnalité critique de l'API :
+        \vspace{5pt}
+        \begin{itemize}[noitemsep,topsep=0pt]
+            \item \textbf{test\_home} : Vérifie la disponibilité de l’API.
+            \item \textbf{test\_generate\_default / fixed\_seed} : Teste la génération de labyrinthes.
+            \item \textbf{test\_invalid\_params} : Vérifie la gestion d’erreurs.
+            \item \textbf{test\_performance} : S’assure que la génération reste rapide.
+        \end{itemize}
+        \vspace{10pt}
+        \textbf{Exemple :}
+        \scriptsize
+        \begin{verbatim}
+    def test_generate_fixed_seed(self):
+        r1 = self.client.get('/generate?xSize=10&ySize=10&seed=42')
+        r2 = self.client.get('/generate?xSize=10&ySize=10&seed=42')
+        self.assertEqual(r1.get_json()["grid"], r2.get_json()["grid"])
+        \end{verbatim}
+    \end{frame}
+
+    % --- Tests d'intégration (CI/CD) ---
+    \begin{frame}[t, fragile]
+        \frametitle{Tests d'intégration et CI/CD}
+        \framesubtitle{Fichier : \texttt{test\_cicd.py}}
+        \justifying
+        Ces tests assurent que l’API reste fonctionnelle après chaque modification majeure :
+        \vspace{5pt}
+        \begin{itemize}[noitemsep,topsep=0pt]
+            \item Vérifie la \textbf{forme du labyrinthe généré}
+            \item Vérifie la \textbf{récupération par \_id} dans MongoDB
+            \item Garantit la \textbf{compatibilité du format JSON}
+        \end{itemize}
+        \vspace{10pt}
+        \textbf{Exemple :}
+        \scriptsize
+        \begin{verbatim}
+    def test_get_maze_by_id(self):
+        test_id = "690d1d58b9055ebd0f144bb6"
+        r = self.client.get(f'/get?id={test_id}')
+        data = r.get_json()[0]
+        self.assertIn("_id", data)
+        self.assertIn("grid", data)
+        \end{verbatim}
+    \end{frame}
+
+    % --- Intégration continue GitHub Actions ---
+    \begin{frame}[t, fragile]
+        \frametitle{Intégration Continue (CI/CD)}
+        \framesubtitle{GitHub Actions - Fichier : \texttt{main.yml}}
+        \justifying
+        Un workflow CI/CD a été mis en place pour :
+        \vspace{5pt}
+        \begin{itemize}[noitemsep,topsep=0pt]
+            \item Lancer automatiquement les tests à chaque \textbf{push / pull request}
+            \item Valider le code avant intégration sur la branche \textbf{main}
+        \end{itemize}
+        \vspace{10pt}
+        \scriptsize
+        \begin{verbatim}
+    name: MazeGeneration CICD
+    on: [push, pull_request]
+    jobs:
+      test:
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v4
+          - uses: actions/setup-python@v5
+            with:
+              python-version: '3.11'
+          - run: pip install -r requirements.txt
+          - run: python -m unittest discover -v
+        \end{verbatim}
+    \end{frame}
+
+    % --- Résultats CI/CD ---
+    \begin{frame}[t]
+        \frametitle{Résultats de l'intégration continue}
+        \item
+        \framesubtitle{Exemples de pipeline}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{logo/CICD/github_pass.png}
+                \captionof{figure}{\textbf{Tests réussis} : tous les checks sont verts}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \centering
+                \includegraphics[width=\linewidth]{logo/CICD/github_fail.png}
+                \captionof{figure}{\textbf{Échec} : un test échoue, pipeline bloqué}
+            \end{column}
+        \end{columns}
+        \vspace{10pt}
+        \centering
+        \textbf{→ Les erreurs sont détectées automatiquement avant la mise en production.}
+    \end{frame}
+
 
 
     % Third section

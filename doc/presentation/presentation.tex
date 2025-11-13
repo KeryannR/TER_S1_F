@@ -11,7 +11,13 @@
 \usepackage{float}
 \usepackage{animate}
 \usepackage{hyperref}
+\usepackage{pgfgantt}
 \usepackage[font=small,labelfont=bf]{caption}
+
+% Define color for the gantt diagram
+\definecolor{Arno}{RGB}{255, 102, 102}
+\definecolor{JJ}{RGB}{102, 204, 255}
+\definecolor{Keryann}{RGB}{153, 255, 153}
 
 % Themes
 \usetheme{Arguelles}
@@ -486,8 +492,30 @@ GET /get?xSize=30&ySize=30&limit=5
 
         % Create frame at will in section
         %% Mettre le comit graph
+        \begin{frame}[t]
+            \frametitle{Organisation}
+            \framesubtitle{Gantt}
+            \begin{figure}
+                \includegraphics[width=\textwidth]{logo/Gantt.png}
+                \caption{Diagramme de Gantt jusqu'à aujourd'hui}
+            \end{figure}
+        \end{frame}
+
+        \begin{frame}[t]
+            \frametitle{GitHub}
+            \framesubtitle{Network Graph}
+            \begin{figure}
+                \includegraphics[width=\textwidth]{logo/Network Graph/Network Graph 2.png}
+                \caption{Network Graph jusqu'à aujourd'hui}
+            \end{figure}
+            \begin{figure}
+                \includegraphics[width=\textwidth]{logo/Network Graph/Commits.png}
+                \caption{Commits sur le mois dernier}
+            \end{figure}
+        \end{frame}
 
 
+        
     \End
     \begin{frame}[plain,standout]
         \centering

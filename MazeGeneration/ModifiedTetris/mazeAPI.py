@@ -45,7 +45,7 @@ def generate_maze():
 
     # Generate maze according to required score
     score = -1
-    while score <= minScore:
+    while score < minScore:
         grid = mazeGen.placeInGrid(
             tileList,
             int(np.ceil(xSize // 2)) + 1,

@@ -253,25 +253,33 @@ def importFromJSON(path:str) -> np.ndarray[int]:
 if __name__ == "__main__":
     X_MAX = Y_MAX = 15
     tileList = importTiles("inCell\\")
-    seed = 6
-    grid = placeInGrid(tileList, X_MAX, Y_MAX, seed=seed, nStep=20000, pReplace=0)
-    grid = extendGrid(grid)
+    seed = None
     
-    #grid = np.ones((31,31), dtype=int)
-    #grid = np.zeros((31,31), dtype=int)
+    adjustedScore = 0
+    step = 0
+    while adjustedScore != 5:
+        grid = placeInGrid(tileList, X_MAX//2, Y_MAX//2, seed=seed, nStep=3, pReplace=0)
+        grid = extendGrid(grid)
     
-    #print(score.getScore(grid))
-    #score.met.print_maze_structure_metrics(grid)
-    #showGrid(grid)
+        #grid = np.ones((31,31), dtype=int)
+        #grid = np.zeros((31,31), dtype=int)
     
-    grid = placePhantomBase(grid)
-    grid = removeBorderSpike(grid, maxLength=2)
-    grid = remove8connexity(grid, seed=seed)
-    grid = placePortal(grid, 1, voidBeforePortal=3)
+        #print(score.getScore(grid))
+        #score.met.print_maze_structure_metrics(grid)
+        #showGrid(grid)
     
-    print(score.getScore(grid))
+        grid = placePhantomBase(grid)
+        grid = removeBorderSpike(grid, maxLength=2)
+        grid = remove8connexity(grid, seed=seed)
+        grid = placePortal(grid, 1, voidBeforePortal=3)
+        adjustedScore = score.getAdjustedScore(grid)
+        step += 1
+        if step%100 == 0:
+            print(step)
+    
+    print(score.getScore(grid), score.getAdjustedScore(grid))
     score.met.print_maze_structure_metrics(grid)
     showGrid(grid)
     
-    #exportToJSON(grid, "test.json")
-    showGrid(importFromJSON(r"C:\Users\arnol\Bureau\Université\Cours\Master Informatique - IA - EUR DS4H\TER\Maze Generation\TER_S1_A\doc\presentation\logo\GeneratedMazes\score0maze.json"))
+    exportToJSON(grid, "score5maze.json")
+    #showGrid(importFromJSON(r"C:\Users\arnol\Bureau\Université\Cours\Master Informatique - IA - EUR DS4H\TER\Maze Generation\TER_S1_A\doc\presentation\logo\GeneratedMazes\score0maze.json"))

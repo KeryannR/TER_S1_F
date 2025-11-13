@@ -62,9 +62,9 @@ def getScore(grid:np.ndarray, weights:np.ndarray[float] = np.array([1, 1, 1, 1, 
     if gridToTestMetrics[-2] > 0.8:
         return 0
     
-    # If crossroad proportion is too much
-    if gridToTestMetrics[-3] > 0.15:
-        return 0
+    # If crossroad proportion is too much, removed for now...
+    # if gridToTestMetrics[-3] > 0.15:
+    #     return 0
     
     score = np.dot(weights*gridToTestMetrics, weights*gridReferenceMetrics)/(np.linalg.norm(weights*gridReferenceMetrics)*np.linalg.norm(weights*gridToTestMetrics))
     # Compute weighted euclidean similarity (1-euclidian)

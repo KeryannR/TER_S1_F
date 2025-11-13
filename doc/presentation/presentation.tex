@@ -596,7 +596,101 @@ GET /get?xSize=30&ySize=30&limit=5
     \end{frame}
     \section{\textbf{4. PACMAN}}
 
-        % Create frame at will in section
+        % --- Introduction PACMAN ---
+    \begin{frame}[t]
+        \frametitle{Visualisation : PACMAN}
+        \framesubtitle{But et intégration}
+        \justifying
+        L’objectif de cette partie est de \textbf{visualiser dynamiquement} les labyrinthes générés à travers une version jouable du jeu \textbf{PACMAN}.
+        \vspace{8pt}
+        Les éléments principaux affichés :
+        \begin{itemize}[noitemsep,topsep=0pt]
+            \item Le labyrinthe issu du JSON (\texttt{grid})
+            \item Le personnage \textbf{Pac-Man} contrôlé par l’utilisateur
+            \item Les \textbf{fantômes} et leur IA de déplacement
+            \item Les \textbf{pellets} et \textbf{power pellets}
+            \item Le \textbf{score} et les \textbf{vies restantes}
+        \end{itemize}
+        \vspace{10pt}
+        Cette simulation est réalisée avec la bibliothèque \textbf{Pygame}.
+    \end{frame}
+
+    % --- Affichage du score et des vies ---
+    \begin{frame}[t, fragile]
+        \frametitle{Affichage du score et des vies}
+        \framesubtitle{Fonction \texttt{draw\_score(window, score, lives)}}
+        \justifying
+        Le score et les vies sont affichés en haut de la fenêtre à chaque frame.
+        \vspace{6pt}
+        \begin{itemize}[noitemsep,topsep=0pt]
+            \item \textbf{Score} : incrémenté lors de la collecte de pellets (+10) ou de power pellets (+50)
+            \item \textbf{Vies} : représentées par des cercles jaunes sous le score
+        \end{itemize}
+        \vspace{8pt}
+        \scriptsize
+        \begin{verbatim}
+def draw_score(window, score, lives):
+    text = font_score.render(f"SCORE: {score}", True, WHITE)
+    window.blit(text, (10, 10))
+    for i in range(lives):
+        pygame.draw.circle(window, (255,255,0), (10+i*25, 40), 8)
+        \end{verbatim}
+        \vspace{5pt}
+        \centering
+        \captionof{figure}{Affichage du score et des vies en jeu}
+    \end{frame}
+
+    % --- Power Pellets ---
+    \begin{frame}[t, fragile]
+        \frametitle{Les Power Pellets}
+        \framesubtitle{Activation du mode "Power"}
+        \justifying
+        Les \textbf{Power Pellets} sont positionnés dans les coins du labyrinthe.
+        Lorsqu’un joueur en mange un :
+        \begin{itemize}[noitemsep,topsep=0pt]
+            \item Pac-Man active le \textbf{mode Power} pendant quelques secondes
+            \item Les fantômes deviennent \textbf{vulnérables}
+            \item Le joueur peut les "manger" pour gagner des points supplémentaires
+        \end{itemize}
+        \vspace{6pt}
+        \scriptsize
+        \begin{verbatim}
+if is_power:
+    pacman.activate_power(duration=200)
+    for ghost in ghosts:
+        ghost.set_vulnerable(duration=200)
+\end{verbatim}
+        \vspace{8pt}
+        \centering
+        \captionof{figure}{Activation du mode Power lors d’un Power Pellet}
+    \end{frame}
+
+    % --- Déplacement fluide du Pac-Man ---
+    \begin{frame}[t, fragile]
+        \frametitle{Déplacement fluide de Pac-Man}
+        \framesubtitle{Méthode \texttt{move()}}
+        \justifying
+        Le déplacement fluide est assuré par un système de direction et de contre-direction :
+        \begin{itemize}[noitemsep,topsep=0pt]
+            \item \texttt{next\_direction} : direction demandée par le joueur
+            \item \texttt{direction} : direction actuelle, mise à jour si possible
+        \end{itemize}
+        \vspace{8pt}
+        \scriptsize
+        \begin{verbatim}
+def move(self):
+    new_x = self.x + self.next_direction[0]
+    new_y = self.y + self.next_direction[1]
+    if self.can_move(new_x, new_y):
+        self.direction = self.next_direction
+    self.x += self.direction[0]
+    self.y += self.direction[1]
+\end{verbatim}
+        \vspace{6pt}
+        \centering
+        \captionof{figure}{Déplacement continu dans le labyrinthe}
+    \end{frame}
+
 
     % Fifth section
     \begin{frame}[standout, plain]

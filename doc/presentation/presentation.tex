@@ -691,6 +691,40 @@ def move(self):
         \captionof{figure}{Déplacement continu dans le labyrinthe}
     \end{frame}
 
+    \begin{frame}[t]
+    \frametitle{Fantômes}
+    \framesubtitle{Déplacement et détection de collision}
+
+    \justifying
+    \begin{itemize}
+        \item Chaque fantôme conserve :
+        \begin{itemize}
+            \item position actuelle \((x,y)\),
+            \item position précédente \((x_{\text{prev}},y_{\text{prev}})\),
+            \item direction et paramètres de sortie de la cage.
+        \end{itemize}
+
+        \item À chaque frame :
+        \begin{itemize}
+            \item on met à jour \((x_{\text{prev}},y_{\text{prev}}) \leftarrow (x,y)\) avant de déplacer l'entité,
+            \item on calcule la nouvelle direction puis on avance d'une case.
+        \end{itemize}
+
+        \item Détection de collision avec Pac-Man :
+        \begin{enumerate}[noitemsep]
+            \item \textbf{Collision directe :} si \((x_{ghost},y_{ghost}) == (x_{pac},y_{pac})\).
+            \item \textbf{Collision croisée (échange de cases) :} si
+            \[
+                (x_{ghost}^{\text{prev}},y_{ghost}^{\text{prev}}) == (x_{pac},y_{pac})
+                \quad\text{et}\quad
+                (x_{ghost},y_{ghost}) == (x_{pac}^{\text{prev}},y_{pac}^{\text{prev}}).
+            \]
+        \end{enumerate}
+
+    \end{itemize}
+
+\end{frame}
+
 
     % Fifth section
     \begin{frame}[standout, plain]

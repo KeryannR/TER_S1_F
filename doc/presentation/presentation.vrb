@@ -1,16 +1,22 @@
-\frametitle{Endpoint /get}
-
-        \textbf{Description :} Récupère un ou plusieurs labyrinthes depuis la base selon des critères.
-
-        \textbf{Méthode :} GET
-
-        \textbf{Paramètres :} id, score, xSize, ySize, seed, nStep, nPortal, maxBorderSpikeSize, includeTile, limit
-
-        \textbf{Retour :} JSON avec un ou plusieurs labyrinthes correspondant aux filtres.
-
-        \textbf{Exemple :}
-        \small
+\frametitle{Déplacement fluide de Pac-Man}
+        \framesubtitle{Méthode \texttt{move()}}
+        \justifying
+        Le déplacement fluide est assuré par un système de direction et de contre-direction :
+        \begin{itemize}[noitemsep,topsep=0pt]
+            \item \texttt{next\_direction} : direction demandée par le joueur
+            \item \texttt{direction} : direction actuelle, mise à jour si possible
+        \end{itemize}
+        \vspace{8pt}
+        \scriptsize
         \begin{verbatim}
-GET /get?xSize=30&ySize=30&limit=5
-=> [{ maze1 }, { maze2 }, { maze3 }, { maze4 }, { maze5 }]
-        \end{verbatim}
+def move(self):
+    new_x = self.x + self.next_direction[0]
+    new_y = self.y + self.next_direction[1]
+    if self.can_move(new_x, new_y):
+        self.direction = self.next_direction
+    self.x += self.direction[0]
+    self.y += self.direction[1]
+\end{verbatim}
+        \vspace{6pt}
+        \centering
+        \captionof{figure}{Déplacement continu dans le labyrinthe}

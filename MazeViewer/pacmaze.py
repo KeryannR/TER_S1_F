@@ -5,6 +5,7 @@ import os
 from pacman import PacMan
 from pellet import Pellet
 from ghost import Ghost
+from fruit import Fruit
 
 # chargement du labyrinthe depuis le JSON
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -170,6 +171,9 @@ def main():
     score = 0
     lives = 3
     pellets = []
+    fruit = None
+    pellets_eaten = 0
+    FRUIT_TRIGGER = 30
 
     pacman = PacMan(grid, CELL_SIZE)
     corner_positions = get_corner_positions(grid)
@@ -192,9 +196,7 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
 
-
         if not game_over:
-            # inputs handling
             keys = pygame.key.get_pressed()
             if keys[pygame.K_UP]:
                 pacman.set_direction(0, -1)
@@ -205,7 +207,6 @@ def main():
             elif keys[pygame.K_RIGHT]:
                 pacman.set_direction(1, 0)
 
-            # déplacer pacman à chaque frame
             pacman.move()
             if not pacman.power_mode:
                 for ghost in ghosts:
@@ -218,29 +219,45 @@ def main():
                 game_over = True
                 continue
 
-            # pellet mangé ?
             for pellet in pellets:
                 if not pellet.eaten and pellet.x == pacman.x and pellet.y == pacman.y:
                     is_power = pellet.eat()
                     score += 50 if is_power else 10
 
-                    if is_power:
-                        # mode power
-                        pacman.activate_power(duration=200)  # 200 frames ≈ 20 sec à 10 FPS
-                        print("POWER MODE")
+                    if not is_power:
+                        pellets_eaten += 1
 
-                        # tous les fantômes deviennent vulnérables
+                    if pellets_eaten >= FRUIT_TRIGGER and fruit is None:
+                        pellets_eaten = 0
+                        center_x = len(grid[0]) // 2
+                        center_y = len(grid) // 2
+                        while grid[center_y][center_x] != 0:
+                            center_y += 1
+
+                        fruit = Fruit(center_x, center_y, CELL_SIZE)
+                        print("Fruit apparu")
+
+                    if is_power:
+                        pacman.activate_power(duration=200)
                         for ghost in ghosts:
                             ghost.set_vulnerable(duration=200)
 
-                    #print("SCORE -->" + str(score))
-
+            if fruit:
+                if pacman.x == fruit.x and pacman.y == fruit.y:
+                    score += fruit.points
+                    print(f"Fruit mangé +{fruit.points} points")
+                    fruit = None
+                elif fruit.is_expired():
+                    print("Fruit disparu")
+                    fruit = None
 
             window.fill(BLACK)
             draw_grid()
             pacman.draw(window)
             for ghost in ghosts:
                 ghost.draw(window)
+            if fruit:
+                fruit.draw(window)
             draw_score(window, score, lives)
             pygame.display.flip()
             clock.tick(10)

@@ -6,6 +6,7 @@ from pacman import PacMan
 from pellet import Pellet
 from ghost import Ghost
 from fruit import Fruit
+from recorder import Recorder
 
 # chargement du labyrinthe depuis le JSON
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -165,8 +166,7 @@ def check_collisions(pacman, ghosts):
 
     return False
 
-
-def main():
+def main(replay_file=None):
     global pellets, score, lives
     score = 0
     lives = 3
@@ -191,21 +191,47 @@ def main():
     running = True
     game_over = False
 
+
+    if replay_file:
+        recorder = Recorder(replay_file)
+        recorder.load()
+        frame_index = 0
+        is_replay = True
+        print(f"Replay lancé depuis {replay_file}")
+    else:
+        recorder = Recorder("record.json")
+        is_replay = False
+
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
 
         if not game_over:
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_UP]:
-                pacman.set_direction(0, -1)
-            elif keys[pygame.K_DOWN]:
-                pacman.set_direction(0, 1)
-            elif keys[pygame.K_LEFT]:
-                pacman.set_direction(-1, 0)
-            elif keys[pygame.K_RIGHT]:
-                pacman.set_direction(1, 0)
+
+            if is_replay:
+                # lire direction depuis le fichier
+                if frame_index < len(recorder.frames):
+                    letter = recorder.frames[frame_index]
+                    dx, dy = Recorder.letter_to_dir(letter)
+                    pacman.set_direction(dx, dy)
+                    frame_index += 1
+                else:
+                    game_over = True
+                    continue
+            else:
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_UP]:
+                    pacman.set_direction(0, -1)
+                elif keys[pygame.K_DOWN]:
+                    pacman.set_direction(0, 1)
+                elif keys[pygame.K_LEFT]:
+                    pacman.set_direction(-1, 0)
+                elif keys[pygame.K_RIGHT]:
+                    pacman.set_direction(1, 0)
+
+            dx, dy = pacman.direction
+            recorder.record_frame(Recorder.dir_to_letter(dx, dy))
 
             pacman.move()
             if not pacman.power_mode:
@@ -291,9 +317,13 @@ def main():
                 return
             clock.tick(10)
 
+    if not is_replay:
+        recorder.save()
+        print(f"Record --> {recorder.filename}")
+
     pygame.quit()
     sys.exit()
 
 
 if __name__ == "__main__":
-    main()
+    main("record.json")

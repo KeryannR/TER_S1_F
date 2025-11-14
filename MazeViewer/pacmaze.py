@@ -8,7 +8,7 @@ from ghost import Ghost
 
 # chargement du labyrinthe depuis le JSON
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-json_path = os.path.join(BASE_DIR, "test_maze.json")
+json_path = os.path.join(BASE_DIR, "test_maze3.json")
 font_path = os.path.join(BASE_DIR, "font", "ARCADE_N.ttf")
 
 with open(json_path, "r") as f:

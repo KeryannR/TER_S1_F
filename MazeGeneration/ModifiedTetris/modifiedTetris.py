@@ -236,12 +236,10 @@ def exportToJSON(grid:np.ndarray[int], outPath:str = None) -> str|None:
     if outPath is None:
         return json.dumps(jsonVal)
     
-    
     with open(outPath, "w") as file:
-        json.dump(
-            jsonVal,      
-            file
-        )
+        json.dump(jsonVal, file)
+
+
 
 def importFromJSON(path:str) -> np.ndarray[int]:
     with open(path, "r") as file:
@@ -249,6 +247,7 @@ def importFromJSON(path:str) -> np.ndarray[int]:
     grid = np.array(dic["grid"], dtype=int)
     grid = np.reshape(grid, (dic["height"], dic["width"]))
     return grid
+
 
 if __name__ == "__main__":
     X_MAX = Y_MAX = 15
@@ -280,6 +279,6 @@ if __name__ == "__main__":
     print(score.getScore(grid), score.getAdjustedScore(grid))
     score.met.print_maze_structure_metrics(grid)
     showGrid(grid)
-    
-    exportToJSON(grid, "score5maze.json")
+        
+    #exportToJSON(grid, "score5maze.json")
     #showGrid(importFromJSON(r"C:\Users\arnol\Bureau\Université\Cours\Master Informatique - IA - EUR DS4H\TER\Maze Generation\TER_S1_A\doc\presentation\logo\GeneratedMazes\score0maze.json"))

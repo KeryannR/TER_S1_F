@@ -54,3 +54,7 @@ https://shaunlebron.github.io/pacman-mazegen/
 - Mise à jour de la métrique d'évaluation des labyrinthes pour éliminer les labyrinthes ayant trop de carrefours, de chemin ou de murs.
 - Ajout à la métrique d'évaluation de poids (possiblement optimisable) pour accorder plus ou moins d'importance à la ressemblance pour une métrique données.
 - Retire la 8-connexité définitvement
+
+### Sixth session:
+#### Implementation:
+- Ajout de deux représentation supplémentaire des labyrinthes à travers des graphes de NetworkX. Plus précisement, une implémentation transforme tous les chemins (téléporteurs inclus) en noeuds et les liaisons entre eux en arrêtes, une deuxième qui transforme seulement les virages, jonctions et carrefours en noeuds et les chemin en ligne droites en arrêtes pondérés.  

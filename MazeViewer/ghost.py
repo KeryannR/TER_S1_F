@@ -99,7 +99,7 @@ class Ghost:
     def can_move(self, x, y):
         # peut se déplacer sur cases 0 et 2 pour sortir 
         if 0 <= x < len(self.grid[0]) and 0 <= y < len(self.grid):
-            return self.grid[y][x] in [0, 2]
+            return self.grid[y][x] in [0, 2, 3]
         return False
 
     def get_possible_directions(self):

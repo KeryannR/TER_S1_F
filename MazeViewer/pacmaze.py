@@ -117,6 +117,17 @@ def get_portals(grid):
                 portals.append((x, y))
     return portals
 
+def apply_portal(entity, portals):
+    current = (entity.x, entity.y)
+    if current in portals:
+        for px, py in portals:
+            if (px, py) != current:
+                old_x, old_y = entity.x, entity.y
+                entity.x, entity.y = px, py
+                entity.prev_x, entity.prev_y = old_x, old_y
+                break
+
+
 def check_collisions(pacman, ghosts):
     global lives  # pour modifier la variable globale
 
@@ -234,6 +245,9 @@ def main(replay_file=None):
             recorder.record_frame(Recorder.dir_to_letter(dx, dy))
 
             pacman.move()
+            portals = get_portals(grid)
+            apply_portal(pacman, portals)
+
             if not pacman.power_mode:
                 for ghost in ghosts:
                     ghost.vulnerable = False
@@ -282,6 +296,7 @@ def main(replay_file=None):
             pacman.draw(window)
             for ghost in ghosts:
                 ghost.draw(window)
+                apply_portal(ghost, portals)
             if fruit:
                 fruit.draw(window)
             draw_score(window, score, lives)

@@ -71,10 +71,9 @@ class PacMan:
         self.power_mode = False
         self.power_timer = 0
 
-
     def can_move(self, x, y):
         if 0 <= x < len(self.grid[0]) and 0 <= y < len(self.grid):
-            return self.grid[y][x] == 0  # 0 = chemin
+            return self.grid[y][x] in [0, 3]
         return False
 
     def activate_power(self, duration=50):  # durée en frames

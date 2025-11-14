@@ -1,51 +1,62 @@
 import networkx as nx
 import matplotlib.pyplot as plt
 import numpy as np
+import json
 
 
 def grid2Graph(grid:np.ndarray[int]) -> nx.Graph:
     """
-    Convert a maze array into a NetworkX graph.
+    Convert a numpy encoded maze into NetworkX graph.
     
     - 0 = path
     - 1 or 2 = walls
     - 3 = teleporter: connects to opposite side of the same row
     """
+    
+    # Initialise the graph
     rows, cols = grid.shape
     G = nx.Graph()
-
-    def add_if_walkable(r, c):
-        """Return (r,c) if inside grid and walkable, else None."""
-        if 0 <= r < rows and 0 <= c < cols and grid[r, c] in (0, 3):
-            return (r, c)
+    
+    # If the cell at row and column is path, then get  it     
+    def addIfWalkable(row, col):
+        if 0 <= row < rows and 0 <= col < cols and grid[row, col] in (0, 3):
+            return (row, col)
         return None
 
     # Add nodes
-    for r in range(rows):
-        for c in range(cols):
-            if grid[r, c] in (0, 3):
-                G.add_node((r, c))
+    for row in range(rows):
+        for col in range(cols):
+            if grid[row, col] in (0, 3):
+                G.add_node((row, col), isVisited = False)
+                try:
+                    if grid[row+1, col] == 2:
+                        G.nodes[(row, col)]["toKeep"] = True
+                    else:
+                        G.nodes[(row, col)]["toKeep"] = False
+                except:
+                    G.nodes[(row, col)]["toKeep"] = False
 
     # Add normal adjacency edges (up, down, left, right)
     directions = [(1,0), (-1,0), (0,1), (0,-1)]
-    for r in range(rows):
-        for c in range(cols):
-            if grid[r, c] not in (0, 3):
+    for row in range(rows):
+        for col in range(cols):
+            if grid[row, col] not in (0, 3):
                 continue
             for dr, dc in directions:
-                neigh = add_if_walkable(r + dr, c + dc)
+                neigh = addIfWalkable(row + dr, col + dc)
                 if neigh:
-                    G.add_edge((r, c), neigh)
+                    G.add_edge((row, col), neigh)
 
     # Add teleporter edges (connect to opposite side)
-    for r in range(rows):
-        for c in range(cols):
-            if grid[r, c] == 3:
-                opposite_c = cols - 1 - c
-                if grid[r, opposite_c] in (0, 3):
-                    G.add_edge((r, c), (r, opposite_c))
-
+    for row in range(rows):
+        for col in range(cols):
+            if grid[row, col] == 3:
+                opposite_col = cols - 1 - col
+                if grid[row, opposite_col] in (0, 3):
+                    G.add_edge((row, col), (row, opposite_col))
+    
     return G
+
 
 def compress_maze_graph(G:nx.Graph) -> nx.Graph:
     """
@@ -58,49 +69,52 @@ def compress_maze_graph(G:nx.Graph) -> nx.Graph:
 
     Straight segments are replaced by weighted edges.
     """
-    def is_turn(node):
-        """Check if a degree-2 node makes a geometric turn."""
-        (r1, c1) = node
+    
+    # Check if a given node make a turn
+    def isTurn(node):
+        (startRow, startCol) = node
         neighbors = list(G.neighbors(node))
         if len(neighbors) != 2:
             return False
 
-        (r2, c2), (r3, c3) = neighbors
+        (endRow1, endCol1), (endRow2, endCol2) = neighbors
         # direction vectors
-        v1 = (r2 - r1, c2 - c1)
-        v2 = (r3 - r1, c3 - c1)
+        v1 = (endRow1 - startRow, endCol1 - startCol)
+        v2 = (endRow2 - startRow, endCol2 - startCol)
 
         # straight if same row or same column (i.e., collinear)
         return not (v1[0] == v2[0] or v1[1] == v2[1])
 
-    # Step 1 — identify important nodes
+    # Step 1 — build the compressed graph
+    CG = nx.Graph()
+
+    # Step 2 — identify important nodes
     important = set()
     for n in G.nodes:
         deg = G.degree[n]
-        if deg != 2:
+        if G.nodes[n]["toKeep"]:
             important.add(n)
-        elif is_turn(n):
+            CG.add_node(n, isVisited = True)
+        elif deg != 2:
             important.add(n)
-
-    # Step 2 — build the compressed graph
-    CG = nx.Graph()
-
-    for n in important:
-        CG.add_node(n)
+            CG.add_node(n, isVisited = False)
+        elif isTurn(n):
+            important.add(n)
+            CG.add_node(n, isVisited = False)
 
     # Step 3 — explore corridors
     visited_edges = set()
 
     for start in important:
-        for nxt in G.neighbors(start):
-            edge_key = tuple(sorted([start, nxt]))
-            if edge_key in visited_edges:
+        for nextNode in G.neighbors(start):
+            edgeKey = tuple(sorted([start, nextNode]))
+            if edgeKey in visited_edges:
                 continue
 
-            path = [start, nxt]
-            visited_edges.add(edge_key)
+            path = [start, nextNode]
+            visited_edges.add(edgeKey)
 
-            current = nxt
+            current = nextNode
             prev = start
 
             # walk until next important node
@@ -126,6 +140,27 @@ def compress_maze_graph(G:nx.Graph) -> nx.Graph:
 
     return CG
 
-def showGraph(G:nx.Graph) -> None:
-    nx.draw(G, with_labels = True, node_color = "lightblue", font_weight = "bold")
+def importFromJSON(path:str) -> np.ndarray[int]:
+    with open(path, "r") as file:
+        dic = json.load(file)
+    grid = np.array(dic["grid"], dtype=int)
+    grid = np.reshape(grid, (dic["height"], dic["width"]))
+    return grid
+
+def showGraph(G:nx.Graph, showVisit:bool = True, showWeight:bool = False) -> None:
+    pos = nx.spring_layout(G)
+    if not showVisit:
+        nx.draw(G, pos, with_labels = True, node_color = "lightblue", font_weight = "bold")
+    else:
+        nx.draw(G, pos, with_labels = True, node_color = [0 if G.nodes[i]["isVisited"] else 255 for i in G.nodes], font_weight = "bold", cmap=plt.cm.seismic)
+    
+    if showWeight:
+        edge_labels = nx.get_edge_attributes(G, "weight")
+        nx.draw_networkx_edge_labels(G, pos, edge_labels = edge_labels)
     plt.show()
+
+if __name__ == "__main__":
+    grid = importFromJSON("test_maze3.json")
+    graph = compress_maze_graph(grid2Graph(grid))
+    showGraph(graph, showWeight=True)
+    print(graph.nodes[(4,6)])

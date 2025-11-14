@@ -1,7 +1,4 @@
 import networkx as nx
-import modifiedTetris as mazeGen
-import referenceMaze.ScoreMaze as score
-
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -132,35 +129,3 @@ def compress_maze_graph(G:nx.Graph) -> nx.Graph:
 def showGraph(G:nx.Graph) -> None:
     nx.draw(G, with_labels = True, node_color = "lightblue", font_weight = "bold")
     plt.show()
-
-if __name__ == "__main__":
-    X_MAX = Y_MAX = 15
-    tileList = mazeGen.importTiles("inCell\\")
-    seed = None
-    
-    adjustedScore = 0
-    step = 0
-    while adjustedScore != 5:
-        grid = mazeGen.placeInGrid(tileList, X_MAX//2, Y_MAX//2, seed=seed, nStep=3, pReplace=0)
-        grid = mazeGen.extendGrid(grid)
-    
-        #grid = np.ones((31,31), dtype=int)
-        #grid = np.zeros((31,31), dtype=int)
-    
-        #print(score.getScore(grid))
-        #score.met.print_maze_structure_metrics(grid)
-        #showGrid(grid)
-    
-        grid = mazeGen.placePhantomBase(grid)
-        grid = mazeGen.removeBorderSpike(grid, maxLength=2)
-        grid = mazeGen.remove8connexity(grid, seed=seed)
-        grid = mazeGen.placePortal(grid, 1, voidBeforePortal=3)
-        adjustedScore = score.getAdjustedScore(grid)
-        step += 1
-        if step%100 == 0:
-            print(step)
-    
-    mazeGen.showGrid(grid)
-    showGraph(grid2Graph(grid))
-    showGraph(compress_maze_graph(grid2Graph(grid)))
-    G = compress_maze_graph(grid2Graph(grid))
